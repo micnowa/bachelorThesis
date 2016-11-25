@@ -2,13 +2,11 @@ package cartessian.genetic.programmming;
 
 import java.util.Random;
 
-//import cartessian.genetic.programmming.Graph.Graph;
-
 public class Grid
 {
 	private int m;
 	private int n;
-	private LogicGate logicGates[][];
+	private Gate logicGates[][];
 
 	public Grid()
 	{
@@ -19,74 +17,19 @@ public class Grid
 	{
 		this.m = mm;
 		this.n = nn;
-		this.logicGates = new LogicGate[this.m][this.n];
+		this.logicGates = new Gate[this.m][this.n];
 		Random randomGenerator = new Random();
-		int randomInt, logicGateCount = 0;
+		int randomInt;
 		for (int ii = 0; ii < this.m; ii++)
 		{
 			for (int jj = 0; jj < this.n; jj++)
 			{
 				randomInt = randomGenerator.nextInt(5) + 1;
-				logicGates[ii][jj] = new LogicGate(randomInt, logicGateCount);
-				logicGateCount++;
+				logicGates[ii][jj] = new Gate(randomInt, ii, jj);
 			}
 		}
-	}
 
-	public LogicGate[][] getLogicGates()
-	{
-		return logicGates;
-	}
-
-	public void setLogicGates(LogicGate[][] logicGates)
-	{
-		this.logicGates = logicGates;
-	}
-
-	public LogicGate getLogicGateAt(int ii, int jj)
-	{
-		return logicGates[ii][jj];
-	}
-	
-	public LogicGate getLogicGateAt(int n)
-	{
-		int[][] tab = new int[1][1];
-		tab = this.getLogicGatePositionAtNumber(n);
-		
-		return logicGates[tab[0][0]][tab[0][1]];
-	}
-	
-	public void setLogicGateAt(LogicGate logicGate, int n)
-	{
-		int[][] tab = new int[1][1];
-		tab = this.getLogicGatePositionAtNumber(n);
-		
-		logicGates[tab[0][0]][tab[0][1]] = logicGate;
-	}
-
-	public void setLogicGateAt(LogicGate logicGate, int ii, int jj)
-	{
-		this.logicGates[ii][jj] = logicGate;
-	}
-
-	public int getWidht()
-	{
-		return n;
-	}
-
-	public void setWidht(int widht)
-	{
-		this.n = widht;
-	}
-
-	public int getHight()
-	{
-		return m;
-	}
-
-	public void setHight(int hight)
-	{
-		this.m = hight;
+		this.linkGates();
 	}
 
 	void printGrid()
@@ -95,25 +38,76 @@ public class Grid
 		{
 			for (int jj = 0; jj < this.n; jj++)
 			{
-				System.out.print(logicGates[ii][jj].getNumber() + "("
-						+ logicGates[ii][jj].getLogicOperation() + ")	");
+				System.out.print("(" + logicGates[ii][jj].getI() + ","
+						+ logicGates[ii][jj].getJ() + ")="
+						+ logicGates[ii][jj].getLogicOperation() + "	");
 			}
 			System.out.println();
 		}
 	}
 
-	int[][] getLogicGatePositionAtNumber(int pos)
+	void linkGates(Gate g1, Gate g2)
 	{
-		int ii, jj;
-		
-		ii = (int)(pos / this.n);
-		jj = pos%this.n;
-
-		int[][] tab = new int[1][2];
-		tab[0][0] = ii;
-		tab[0][1] = jj;
-
-		return tab;
+		g2.addEnteringGate(g1);
+		g1.addExitingGate(g2);
 	}
 
+	void linkGates()
+	{
+		Random randomGenerator = new Random();
+		int rand1, rand2;
+		System.out.println("Sorting by entering");
+
+		for (int jj = 1; jj < this.n; jj++)
+		{
+			for (int ii = 0; ii < this.m; ii++)
+			{
+				rand1 = randomGenerator.nextInt(5);
+				rand2 = randomGenerator.nextInt(5);
+				while(rand1 == rand2) rand2 = randomGenerator.nextInt(5);
+				
+				this.linkGates(logicGates[rand1][jj - 1], logicGates[ii][jj]);
+				this.linkGates(logicGates[rand2][jj - 1], logicGates[ii][jj]);
+
+				System.out.println(logicGates[ii][jj].getEnteringGates().get(0)
+						.getI()
+						+ ","
+						+ logicGates[ii][jj].getEnteringGates().get(0).getJ()
+						+ "--->" + ii + "," + jj);
+
+				System.out.println(logicGates[ii][jj].getEnteringGates().get(1)
+						.getI()
+						+ ","
+						+ logicGates[ii][jj].getEnteringGates().get(1).getJ()
+						+ "--->" + ii + "," + jj);
+			}
+		}
+		System.out.println("Sorting by exiting");
+
+		int lim;
+		for (int jj = 0; jj < this.n - 1; jj++)
+		{
+			for (int ii = 0; ii < this.m; ii++)
+			{
+				lim = logicGates[ii][jj].getExitingGates().size();
+				if (lim == 0) System.out.println(ii + "," + jj + "---> NULL");
+				else
+				{
+					for (int kk = 0; kk < lim; kk++)
+					{
+						System.out.println(ii
+								+ ","
+								+ jj
+								+ "--->"
+								+ logicGates[ii][jj].getExitingGates().get(kk)
+										.getI()
+								+ ","
+								+ logicGates[ii][jj].getExitingGates().get(kk)
+										.getJ());
+					}
+				}
+				System.out.println();
+			}
+		}
+	}
 }
