@@ -4,11 +4,11 @@ import java.util.LinkedList;
 
 public class Gate
 {
-	int i;
-	int j;
-	private int logicOperation;
-	private LinkedList<Gate> enteringGates = new LinkedList<Gate>();
-	private LinkedList<Gate> exitingGates = new LinkedList<Gate>();
+	protected int i;
+	protected int j;
+	protected int logicOperation;
+	protected LinkedList<Gate> enteringGates = new LinkedList<Gate>();
+	protected LinkedList<Gate> exitingGates = new LinkedList<Gate>();
 
 	public Gate()
 	{
@@ -52,8 +52,6 @@ public class Gate
 		this.j = j;
 	}
 	
-	
-	//Entering********************************
 	public int getEnteringGatesNumber()
 	{
 		return enteringGates.size();
@@ -68,10 +66,12 @@ public class Gate
 	{
 		return enteringGates;
 	}
-	//******************************************
 	
+	public void setEnteringGates(LinkedList<Gate> gatesEntering)
+	{
+		this.enteringGates = gatesEntering;
+	}
 	
-	//Exiting********************************
 	public int getExitingGatesNumber()
 	{
 		return exitingGates.size();
@@ -86,8 +86,11 @@ public class Gate
 	{
 		return exitingGates;
 	}
-	//******************************************
 	
+	public void setExitingGates(LinkedList<Gate> gatesExiting)
+	{
+		this.exitingGates = gatesExiting;
+	}
 	
 	public boolean result(boolean p, boolean q)
 	{

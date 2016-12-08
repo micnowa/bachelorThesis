@@ -7,5 +7,8 @@ public class MainClass
 	{
 		Grid grid = new Grid(5, 5);
 		grid.printGrid();
+		
+		GateGenerator g = new GateGenerator(grid, 1, 1);
+		g.generateNewGrids();
 	}
 }
