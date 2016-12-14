@@ -1,14 +1,35 @@
 package cartessian.genetic.programmming;
 
-public class MainClass
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class MainClass extends JFrame implements ActionListener
 {
+	private static final long serialVersionUID = 1L;
+
+	public MainClass()
+	{
+		setSize(1600, 900);
+		setTitle("Recurrent Cartessian Genetic Programming");
+		setLayout(null);
+	}
 
 	public static void main(String[] args)
 	{
-		Grid grid = new Grid(5, 5);
+		MainClass window = new MainClass();
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//window.setVisible(true);
+		Grid grid = new Grid(10, 5, 5);
 		grid.printGrid();
-		
-		GateGenerator g = new GateGenerator(grid, 1, 1);
-		g.generateNewGrids();
+
+		GridGenerator g = new GridGenerator(grid, 0.1, 0.1);
+		System.out.println("Main Grid:\n");
+		g.getMainGrid().printGrid();
+	}
+
+	@Override public void actionPerformed(ActionEvent e)
+	{
 	}
 }

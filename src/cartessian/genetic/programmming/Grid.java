@@ -2,79 +2,220 @@ package cartessian.genetic.programmming;
 
 import java.util.Random;
 
+/**
+ * @author Michał Nowaliński
+ * 
+ */
 public class Grid
 {
 	protected int m;
 	protected int n;
 	protected Gate logicGates[][];
 	protected Random randomGenerator;
+	protected int operationNumber;
 
+	/**
+	 * @return Number number of rows of the two dimentional table of gates
+	 */
+	public int getM()
+	{
+		return m;
+	}
+
+	/**
+	 * Sets number of rows
+	 * 
+	 * @param m
+	 *            number of rows
+	 */
+	public void setM(int m)
+	{
+		this.m = m;
+	}
+
+	/**
+	 * @return Number number of columns of the two dimentional table of gates
+	 */
+	public int getN()
+	{
+		return n;
+	}
+
+	/**
+	 * Sets number of columns
+	 * 
+	 * @param n
+	 *            number of columns
+	 */
+	public void setN(int n)
+	{
+		this.n = n;
+	}
+
+	/**
+	 * @return two dimensional table of gates
+	 */
+	public Gate[][] getLogicGates()
+	{
+		return logicGates;
+	}
+
+	/**
+	 * Sets two dimentional table of logic gates
+	 * 
+	 * @param logicGates
+	 */
+	public void setLogicGates(Gate[][] logicGates)
+	{
+		this.logicGates = logicGates;
+	}
+
+	/**
+	 * @return object creating random numbers
+	 */
+	public Random getRandomGenerator()
+	{
+		return randomGenerator;
+	}
+
+	/**
+	 * Sets object creating random numbers
+	 * 
+	 * @param randomGenerator
+	 *            object creating random numbers
+	 */
+	public void setRandomGenerator(Random randomGenerator)
+	{
+		this.randomGenerator = randomGenerator;
+	}
+
+	/**
+	 * Default constructor. Set all fields with their default values
+	 */
 	public Grid()
 	{
 		super();
+		this.m = 0;
+		this.n = 0;
+		this.operationNumber = 0;
+		this.randomGenerator = new Random();
 	}
 
-	public Grid(int mm,int nn)
+	/**
+	 * @param operationNumber
+	 *            Number of different operations gates can have
+	 * @param mm
+	 *            Number of rows
+	 * @param nn
+	 *            Number of columns
+	 */
+	public Grid(int operationNumber,int mm,int nn)
 	{
+		super();
 		this.m = mm;
 		this.n = nn;
+		this.operationNumber = operationNumber;
 		this.logicGates = new Gate[this.m][this.n];
-		randomGenerator = new Random();
+		this.randomGenerator = new Random();
 		int randomInt;
 		for (int ii = 0; ii < this.m; ii++)
 		{
 			for (int jj = 0; jj < this.n; jj++)
 			{
-				randomInt = randomGenerator.nextInt(5) + 1;
+				randomInt = randomGenerator.nextInt(this.getOperationNumber());
 				logicGates[ii][jj] = new Gate(randomInt, ii, jj);
 			}
 		}
-
 		this.linkAllGatesInGrid();
 	}
 
+	/**
+	 * @return Number of different operations, single gate can have
+	 */
+	public int getOperationNumber()
+	{
+		return operationNumber;
+	}
+
+	/**
+	 * @param operationNumber
+	 *            Sets number of different operations, single gate can have
+	 */
+	public void setOperationNumber(int operationNumber)
+	{
+		this.operationNumber = operationNumber;
+	}
+
+	/**
+	 * Copying constructor
+	 * 
+	 * @param grid
+	 */
 	public Grid(Grid grid)
 	{
 		this.m = grid.m;
 		this.n = grid.n;
-		randomGenerator = new Random();
+		this.operationNumber = grid.getOperationNumber();
+		this.randomGenerator = new Random();
 		this.logicGates = new Gate[this.m][this.n];
 		for (int ii = 0; ii < this.m; ii++)
 		{
 			for (int jj = 0; jj < this.n; jj++)
 			{
-				logicGates[ii][jj] = new Gate(grid.logicGates[ii][jj].getLogicOperation(), ii, jj);
+				logicGates[ii][jj] = new Gate(grid.logicGates[ii][jj].getOperation(), ii, jj);
 				this.logicGates[ii][jj].setEnteringGates(grid.logicGates[ii][jj].getEnteringGates());
 				this.logicGates[ii][jj].setExitingGates(grid.logicGates[ii][jj].getExitingGates());
 			}
 		}
 	}
 
+	/**
+	 * Prints gird on the stand output
+	 */
 	void printGrid()
 	{
 		for (int ii = 0; ii < this.m; ii++)
 		{
 			for (int jj = 0; jj < this.n; jj++)
 			{
-				System.out.print("(" + logicGates[ii][jj].getI() + "," + logicGates[ii][jj].getJ() + ")=" + logicGates[ii][jj].getLogicOperation() + "	");
+				System.out.print("(" + logicGates[ii][jj].getI() + "," + logicGates[ii][jj].getJ() + ")=" + logicGates[ii][jj].getOperation() + "	");
 			}
 			System.out.println();
 		}
 		System.out.println();
 	}
 
+	/**
+	 * Links gates. g1 points to g2, g2 is pointed to by g1. Function adds g1 to
+	 * g2.enteringGates, and g2 to g1.exitingGates
+	 * 
+	 * @param g1
+	 *            First gate
+	 * @param g2
+	 *            Second gate
+	 */
 	void linkGates(Gate g1, Gate g2)
 	{
 		g2.addEnteringGate(g1);
 		g1.addExitingGate(g2);
 	}
 
+	/**
+	 * Removes link between g1 and g2. Functions removes g1 from
+	 * g2.enteringGates and g2 form g1.exitingGates
+	 * 
+	 * @param g1
+	 * @param g2
+	 */
 	void removeLink(Gate g1, Gate g2)
 	{
 		g1.getExitingGates().remove(g2);
 		g1.getEnteringGates().remove(g1);
 	}
 
+	/**
+	 * Draws links between gates
+	 */
 	void linkAllGatesInGrid()
 	{
 		int randomIi1, randomIi2, randomJj1, randomJj2;
@@ -83,11 +224,11 @@ public class Grid
 		{
 			for (int ii = 0; ii < this.m; ii++)
 			{
-				randomIi1 = randomGenerator.nextInt(5);
-				randomIi2 = randomGenerator.nextInt(5);
+				randomIi1 = randomGenerator.nextInt(this.getM());
+				randomIi2 = randomGenerator.nextInt(this.getM());
 				while (randomIi1 == randomIi2)
 				{
-					randomIi2 = randomGenerator.nextInt(5);
+					randomIi2 = randomGenerator.nextInt(this.getM());
 				}
 				randomJj1 = randomGenerator.nextInt(jj);
 				randomJj2 = randomGenerator.nextInt(jj);
@@ -120,7 +261,16 @@ public class Grid
 		}
 	}
 
-	void relinkGates(Gate gate, double linkProbability)
+	/**
+	 * Switches links, that enter the gate, between gates with given probability
+	 * Always switches 2 link, because 2 links enter one gate
+	 * 
+	 * @param gate
+	 *            gate, whose link shall be switched
+	 * @param linkProbability
+	 *            Probability of switching link
+	 */
+	private void relinkGates(Gate gate, double linkProbability)
 	{
 		for (int kk = 0; kk < 2; kk++)
 		{
@@ -134,13 +284,26 @@ public class Grid
 		}
 	}
 
-	void reassignLogicGateOperation(double logicGateProbability)
+	/**
+	 * Draws with given probability, whether gate's operation shall be switched
+	 * If so draws new one form uniform distribution between 0 and
+	 * gate.operationNumber. Function repeats it for every gate in grid
+	 * 
+	 * @param logicGateProbability
+	 */
+	void reassignGatesOperation(double logicGateProbability)
 	{
 		for (int jj = 0; jj < this.n; jj++)
 			for (int ii = 0; ii < this.m; ii++)
-				if (randomGenerator.nextDouble() < logicGateProbability) this.logicGates[0][jj].setLogicOperation(randomGenerator.nextInt(5));
+				if (randomGenerator.nextDouble() < logicGateProbability) this.logicGates[ii][jj].setOperation(randomGenerator.nextInt(5));
 	}
 
+	/**
+	 * Switches with given probability every link
+	 * 
+	 * @param linkProbability
+	 *            porbability of switching link
+	 */
 	void relinkAllGatesInGrid(double linkProbability)
 	{
 		for (int jj = 1; jj < this.n; jj++)
