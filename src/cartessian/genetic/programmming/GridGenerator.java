@@ -2,6 +2,7 @@ package cartessian.genetic.programmming;
 
 /**
  * @author Michał Nowaliński
+ * @version 1.01
  *
  */
 public class GridGenerator
@@ -21,11 +22,7 @@ public class GridGenerator
 	/**
 	 * Probability of changing link between two grids
 	 */
-	private double linkChangeProbability;
-	/**
-	 * Probability of changing grid's operation
-	 */
-	private double operationChangeProbability;
+	private double probability;
 	
 	
 	/**
@@ -67,36 +64,18 @@ public class GridGenerator
 	/**
 	 * @return
 	 */
-	public double getLinkChangeProbability()
-	{
-		return linkChangeProbability;
-	}
-
-	
-	/**
-	 * @param linkChangeProbability
-	 */
-	public void setLinkChangeProbability(double linkChangeProbability)
-	{
-		this.linkChangeProbability = linkChangeProbability;
-	}
-
-	
-	/**
-	 * @return
-	 */
 	public double getOperationChangeProbability()
 	{
-		return operationChangeProbability;
+		return probability;
 	}
 
 	
 	/**
 	 * @param operationChangeProbability
 	 */
-	public void setOperationChangeProbability(double operationChangeProbability)
+	public void setProbability(double probability)
 	{
-		this.operationChangeProbability = operationChangeProbability;
+		this.probability = probability;
 	}
 
 
@@ -117,12 +96,11 @@ public class GridGenerator
 	 * @param linkChangeProb	Probability of changing link in new grid
 	 * @param gateChangeProb	Probability of changing gate's operation in new grid
 	 */
-	public GridGenerator(Grid initialGrid, double linkChangeProb, double gateChangeProb)
+	public GridGenerator(Grid initialGrid, double prob)
 	{
-		this.mainGrid = new Grid(initialGrid);
+		this.mainGrid = initialGrid;
 		this.grid = new Grid[GridGenerator.getGridnumber()];
-		linkChangeProbability = linkChangeProb;
-		operationChangeProbability = gateChangeProb;
+		probability = prob;
 		this.generateNewGrids();
 	}
 
@@ -134,8 +112,8 @@ public class GridGenerator
 		for (int ii = 0; ii < this.getGridnumber(); ii++)
 		{
 			this.grid[ii] = new Grid(this.mainGrid);
-			this.grid[ii].reassignGatesOperation(this.operationChangeProbability);
-			this.grid[ii].relinkAllGatesInGrid(this.linkChangeProbability);
+			this.grid[ii].reassignGatesOperation(this.probability);
+			this.grid[ii].relinkAllGatesInGrid(this.probability);
 			this.grid[ii].printGrid();
 		}
 	}

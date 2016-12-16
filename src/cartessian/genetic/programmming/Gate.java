@@ -2,11 +2,13 @@ package cartessian.genetic.programmming;
 
 import java.util.LinkedList;
 
+import cartessian.genetic.programmming.operation.Operationable;
+
 public class Gate
 {
 	protected int i;
 	protected int j;
-	protected int operation;
+	protected Operationable operation;
 	protected LinkedList<Gate> enteringGates = new LinkedList<Gate>();
 	protected LinkedList<Gate> exitingGates = new LinkedList<Gate>();
 	
@@ -24,29 +26,28 @@ public class Gate
 	 * @param  ii	i-position
 	 * @param  jj	j-position
 	 */
-	public Gate(int operation,int ii,int jj)
+	public Gate(Operationable operation,int ii,int jj)
 	{
 		this.operation = operation;
 		this.i = ii;
 		this.j = jj;
 	}
 
+
 	/**
-	 * Returns gate's operation
-	 * 
-	 * @return      operation in gate
+	 * @return Operation in the gate
 	 */
-	public int getOperation()
+	public Operationable getOperation()
 	{
-		return this.operation;
+		return operation;
 	}
 
 	/**
-	 * Sets gate's operation
-	 *
-	 * @param  operation	Operation, that should be in the gate
+	 * Sets the operation in gate
+	 * 
+	 * @param operation
 	 */
-	public void setOperation(int operation)
+	public void setOperation(Operationable operation)
 	{
 		this.operation = operation;
 	}
@@ -184,21 +185,7 @@ public class Gate
 	 */
 	public boolean result(boolean p, boolean q)
 	{
-		switch (this.operation)
-		{
-			case 0: // AND
-				return p & q;
-			case 1: // OR
-				return p || q;
-			case 2: // XOR
-				return ((p || q) && !(p && q));
-			case 3: // NOR
-				return !(p || q);
-			case 4: // NAND
-				return p ? !q : true;
-			default:
-				return false;
-		}
+		return false;
 	}
 	
 	

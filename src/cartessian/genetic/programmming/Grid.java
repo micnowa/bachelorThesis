@@ -1,5 +1,8 @@
 package cartessian.genetic.programmming;
 
+import cartessian.genetic.programmming.operation.*;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -8,11 +11,55 @@ import java.util.Random;
  */
 public class Grid
 {
-	protected int m;
-	protected int n;
-	protected Gate logicGates[][];
-	protected Random randomGenerator;
-	protected int operationNumber;
+	private int m;
+	private int n;
+	private Gate gates[][];
+	private Random randomGenerator;
+	private int operationNumber;
+	private ArrayList<Operationable> operationList;
+
+	/**
+	 * Default constructor. Set all fields with their default values
+	 */
+	public Grid()
+	{
+		super();
+		this.m = 0;
+		this.n = 0;
+		this.operationNumber = 0;
+		this.randomGenerator = new Random();
+		operationList = new ArrayList<Operationable>();
+	}
+
+	/**
+	 * @param operationNumber
+	 *            Number of different operations gates can have
+	 * @param mm
+	 *            Number of rows
+	 * @param nn
+	 *            Number of columns
+	 */
+	public Grid(ArrayList<Operationable> operations,int mm,int nn)
+	{
+		super();
+		this.m = mm;
+		this.n = nn;
+		this.operationNumber = operations.size();
+		this.operationList = new ArrayList<Operationable>(operations);
+		this.gates = new Gate[this.m][this.n];
+		this.randomGenerator = new Random();
+		int randomInt;
+		for (int ii = 0; ii < this.m; ii++)
+		{
+			for (int jj = 0; jj < this.n; jj++)
+			{
+				randomInt = randomGenerator.nextInt(this.getOperationNumber());
+				Operationable op = (Operationable) (this.operationList.toArray())[randomInt];
+				gates[ii][jj] = new Gate(op, ii, jj);
+			}
+		}
+		this.linkAllGatesInGrid();
+	}
 
 	/**
 	 * @return Number number of rows of the two dimentional table of gates
@@ -55,9 +102,9 @@ public class Grid
 	/**
 	 * @return two dimensional table of gates
 	 */
-	public Gate[][] getLogicGates()
+	public Gate[][] getGates()
 	{
-		return logicGates;
+		return gates;
 	}
 
 	/**
@@ -65,9 +112,9 @@ public class Grid
 	 * 
 	 * @param logicGates
 	 */
-	public void setLogicGates(Gate[][] logicGates)
+	public void setGates(Gate[][] logicGates)
 	{
-		this.logicGates = logicGates;
+		this.gates = logicGates;
 	}
 
 	/**
@@ -87,46 +134,6 @@ public class Grid
 	public void setRandomGenerator(Random randomGenerator)
 	{
 		this.randomGenerator = randomGenerator;
-	}
-
-	/**
-	 * Default constructor. Set all fields with their default values
-	 */
-	public Grid()
-	{
-		super();
-		this.m = 0;
-		this.n = 0;
-		this.operationNumber = 0;
-		this.randomGenerator = new Random();
-	}
-
-	/**
-	 * @param operationNumber
-	 *            Number of different operations gates can have
-	 * @param mm
-	 *            Number of rows
-	 * @param nn
-	 *            Number of columns
-	 */
-	public Grid(int operationNumber,int mm,int nn)
-	{
-		super();
-		this.m = mm;
-		this.n = nn;
-		this.operationNumber = operationNumber;
-		this.logicGates = new Gate[this.m][this.n];
-		this.randomGenerator = new Random();
-		int randomInt;
-		for (int ii = 0; ii < this.m; ii++)
-		{
-			for (int jj = 0; jj < this.n; jj++)
-			{
-				randomInt = randomGenerator.nextInt(this.getOperationNumber());
-				logicGates[ii][jj] = new Gate(randomInt, ii, jj);
-			}
-		}
-		this.linkAllGatesInGrid();
 	}
 
 	/**
@@ -157,14 +164,16 @@ public class Grid
 		this.n = grid.n;
 		this.operationNumber = grid.getOperationNumber();
 		this.randomGenerator = new Random();
-		this.logicGates = new Gate[this.m][this.n];
+		this.operationNumber = grid.getOperationNumber();
+		this.operationList = grid.operationList;
+		this.gates = new Gate[this.m][this.n];
 		for (int ii = 0; ii < this.m; ii++)
 		{
 			for (int jj = 0; jj < this.n; jj++)
 			{
-				logicGates[ii][jj] = new Gate(grid.logicGates[ii][jj].getOperation(), ii, jj);
-				this.logicGates[ii][jj].setEnteringGates(grid.logicGates[ii][jj].getEnteringGates());
-				this.logicGates[ii][jj].setExitingGates(grid.logicGates[ii][jj].getExitingGates());
+				gates[ii][jj] = new Gate(grid.gates[ii][jj].getOperation(), ii, jj);
+				this.gates[ii][jj].setEnteringGates(grid.gates[ii][jj].getEnteringGates());
+				this.gates[ii][jj].setExitingGates(grid.gates[ii][jj].getExitingGates());
 			}
 		}
 	}
@@ -178,7 +187,7 @@ public class Grid
 		{
 			for (int jj = 0; jj < this.n; jj++)
 			{
-				System.out.print("(" + logicGates[ii][jj].getI() + "," + logicGates[ii][jj].getJ() + ")=" + logicGates[ii][jj].getOperation() + "	");
+				System.out.print("(" + gates[ii][jj].getI() + "," + gates[ii][jj].getJ() + ")=" + gates[ii][jj].getOperation() + "	");
 			}
 			System.out.println();
 		}
@@ -233,11 +242,11 @@ public class Grid
 				randomJj1 = randomGenerator.nextInt(jj);
 				randomJj2 = randomGenerator.nextInt(jj);
 
-				this.linkGates(logicGates[randomIi1][randomJj1], logicGates[ii][jj]);
-				this.linkGates(logicGates[randomIi2][randomJj2], logicGates[ii][jj]);
+				this.linkGates(gates[randomIi1][randomJj1], gates[ii][jj]);
+				this.linkGates(gates[randomIi2][randomJj2], gates[ii][jj]);
 
-				System.out.println(logicGates[ii][jj].getEnteringGates().get(0).getI() + "," + logicGates[ii][jj].getEnteringGates().get(0).getJ() + "--->" + ii + "," + jj);
-				System.out.println(logicGates[ii][jj].getEnteringGates().get(1).getI() + "," + logicGates[ii][jj].getEnteringGates().get(1).getJ() + "--->" + ii + "," + jj);
+				System.out.println(gates[ii][jj].getEnteringGates().get(0).getI() + "," + gates[ii][jj].getEnteringGates().get(0).getJ() + "--->" + ii + "," + jj);
+				System.out.println(gates[ii][jj].getEnteringGates().get(1).getI() + "," + gates[ii][jj].getEnteringGates().get(1).getJ() + "--->" + ii + "," + jj);
 			}
 		}
 
@@ -247,13 +256,13 @@ public class Grid
 		{
 			for (int ii = 0; ii < this.m; ii++)
 			{
-				lim = logicGates[ii][jj].getExitingGates().size();
+				lim = gates[ii][jj].getExitingGates().size();
 				if (lim == 0) System.out.println(ii + "," + jj + "---> NULL");
 				else
 				{
 					for (int kk = 0; kk < lim; kk++)
 					{
-						System.out.println(ii + "," + jj + "--->" + logicGates[ii][jj].getExitingGates().get(kk).getI() + "," + logicGates[ii][jj].getExitingGates().get(kk).getJ());
+						System.out.println(ii + "," + jj + "--->" + gates[ii][jj].getExitingGates().get(kk).getI() + "," + gates[ii][jj].getExitingGates().get(kk).getJ());
 					}
 				}
 				System.out.println();
@@ -279,7 +288,7 @@ public class Grid
 				this.removeLink(gate.getEnteringGates().getFirst(), gate);
 				int column = randomGenerator.nextInt(gate.getJ());
 				int row = randomGenerator.nextInt(this.m);
-				this.linkGates(this.logicGates[row][column], gate);
+				this.linkGates(this.gates[row][column], gate);
 			}
 		}
 	}
@@ -295,7 +304,13 @@ public class Grid
 	{
 		for (int jj = 0; jj < this.n; jj++)
 			for (int ii = 0; ii < this.m; ii++)
-				if (randomGenerator.nextDouble() < logicGateProbability) this.logicGates[ii][jj].setOperation(randomGenerator.nextInt(5));
+			{
+				if (randomGenerator.nextDouble() < logicGateProbability)
+				{
+					this.gates[ii][jj].setOperation(this.operationList.get(randomGenerator.nextInt(this.getOperationNumber())));
+				}
+			}
+
 	}
 
 	/**
@@ -310,7 +325,7 @@ public class Grid
 		{
 			for (int ii = 0; ii < this.m; ii++)
 			{
-				this.relinkGates(this.logicGates[ii][jj], linkProbability);
+				this.relinkGates(this.gates[ii][jj], linkProbability);
 			}
 		}
 	}
