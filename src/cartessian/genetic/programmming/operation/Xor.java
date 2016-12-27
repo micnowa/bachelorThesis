@@ -1,13 +1,17 @@
 package cartessian.genetic.programmming.operation;
 
-public class Xor implements Operationable
+import java.util.ArrayList;
+
+public class Xor implements Operational<Boolean>
 {
 
-	@Override public boolean calculateValue(boolean p, boolean q)
+	@Override public Boolean calculateValue(ArrayList<Boolean> list)
 	{
-		return ((p || q) && !(p && q));
+		Boolean a = list.get(0);
+		Boolean b = list.get(1);
+		return ((a || b) && !(a && b));//Good a XOR b
 	}
-	
+
 	@Override public String toString()
 	{
 		// TODO Auto-generated method stub

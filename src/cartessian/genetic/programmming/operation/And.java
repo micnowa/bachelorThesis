@@ -1,13 +1,15 @@
 package cartessian.genetic.programmming.operation;
 
-public class And implements Operationable
+import java.util.ArrayList;
+
+public class And implements Operational<Boolean>
 {
-
-	@Override public boolean calculateValue(boolean p, boolean q)
+	@Override public Boolean calculateValue(ArrayList<Boolean> list)
 	{
-		return p & q;
+		// TODO Auto-generated method stub
+		return (list.get(0) && list.get(1));//Good a AND b
 	}
-
+	
 	@Override public String toString()
 	{
 		// TODO Auto-generated method stub

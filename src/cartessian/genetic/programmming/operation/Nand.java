@@ -1,13 +1,15 @@
 package cartessian.genetic.programmming.operation;
 
-public class Nand implements Operationable
+import java.util.ArrayList;
+
+public class Nand implements Operational<Boolean>
 {
 
-	@Override public boolean calculateValue(boolean p, boolean q)
+	@Override public Boolean calculateValue(ArrayList<Boolean> list)
 	{
-		return p ? !q : true;
+		return (list.get(0)) ? !(list.get(1)) : true;//Good a NAND b
 	}
-	
+
 	@Override public String toString()
 	{
 		// TODO Auto-generated method stub

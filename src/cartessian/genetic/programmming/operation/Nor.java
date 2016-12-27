@@ -1,13 +1,15 @@
 package cartessian.genetic.programmming.operation;
 
-public class Nor implements Operationable
+import java.util.ArrayList;
+
+public class Nor implements Operational<Boolean>
 {
 
-	@Override public boolean calculateValue(boolean p, boolean q)
+	@Override public Boolean calculateValue(ArrayList<Boolean> list)
 	{
-		return !(p || q);
+		return !((list.get(0)) || list.get(1));//Good a NOR b
 	}
-	
+
 	@Override public String toString()
 	{
 		// TODO Auto-generated method stub

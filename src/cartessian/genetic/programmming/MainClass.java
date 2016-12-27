@@ -2,47 +2,55 @@ package cartessian.genetic.programmming;
 
 import cartessian.genetic.programmming.operation.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
 
-import cartessian.genetic.programmming.operation.Operationable;
+import cartessian.genetic.programmming.operation.Operational;
 
-public class MainClass extends JFrame implements ActionListener
+public class MainClass extends Canvas
 {
 	private static final long serialVersionUID = 1L;
 
 	public MainClass()
 	{
-		setSize(1600, 900);
-		setTitle("Recurrent Cartessian Genetic Programming");
-		setLayout(null);
+		super();
 	}
+
+	
 
 	public static void main(String[] args)
 	{
-		MainClass window = new MainClass();
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//window.setVisible(true);
-		ArrayList<Operationable> operations = new ArrayList<Operationable>();
+		// Available Operations
+		ArrayList<Operational<Boolean>> operations = new ArrayList<Operational<Boolean>>();
 		operations.add(new And());
+		operations.add(new Or());
 		operations.add(new Nor());
 		operations.add(new Xor());
-		operations.add(new Or());
 		operations.add(new Nand());
-		
-		
-		Grid grid = new Grid(operations, 5, 5);
+
+		// Grid of operations
+		Grid<Operational<Boolean>> grid = new Grid<Operational<Boolean>>(operations, 5, 5, 1);
 		grid.printGrid();
 
-		GridGenerator g = new GridGenerator(grid, 0.75);
-		System.out.println("Main Grid:\n");
+		// Set of grids
+		GridGenerator<Operational<Boolean>> g = new GridGenerator<Operational<Boolean>>(grid, 0.75);
 		g.getMainGrid().printGrid();
+
+		// List of values
+		ArrayList<Boolean> listBool = new ArrayList<Boolean>();
+		listBool.add(true);
+		listBool.add(true);
+		System.out.println(((Operational<Boolean>) ((grid.getGates())[0][0]).getOperation()).calculateValue(listBool));
+		
+		
+		GridVisualizer<Operational<Boolean>> m = new GridVisualizer<>(g.getGrid()[0]);
+		JFrame f = new JFrame();
+		f.add(m);
+		f.setSize(1600, 900);
+		f.setVisible(true);
+
 	}
 
-	@Override public void actionPerformed(ActionEvent e)
-	{
-	}
 }

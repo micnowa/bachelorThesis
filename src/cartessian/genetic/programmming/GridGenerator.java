@@ -5,7 +5,7 @@ package cartessian.genetic.programmming;
  * @version 1.01
  *
  */
-public class GridGenerator
+public class GridGenerator<T>
 {
 	/**
 	 * Number of copied grids
@@ -14,11 +14,11 @@ public class GridGenerator
 	/**
 	 * Grid new grid are created from
 	 */
-	private Grid mainGrid;
+	private Grid<T> mainGrid;
 	/**
 	 * Grids copied from main grid
 	 */
-	private Grid[] grid;
+	private Grid<T>[] grid;
 	/**
 	 * Probability of changing link between two grids
 	 */
@@ -28,7 +28,7 @@ public class GridGenerator
 	/**
 	 * @return mainGrid
 	 */
-	public Grid getMainGrid()
+	public Grid<T> getMainGrid()
 	{
 		return mainGrid;
 	}
@@ -37,7 +37,7 @@ public class GridGenerator
 	/**
 	 * @param mainGrid
 	 */
-	public void setMainGrid(Grid mainGrid)
+	public void setMainGrid(Grid<T> mainGrid)
 	{
 		this.mainGrid = mainGrid;
 	}
@@ -46,7 +46,7 @@ public class GridGenerator
 	/**
 	 * @return
 	 */
-	public Grid[] getGrid()
+	public Grid<T>[] getGrid()
 	{
 		return grid;
 	}
@@ -55,7 +55,7 @@ public class GridGenerator
 	/**
 	 * @param grid
 	 */
-	public void setGrid(Grid[] grid)
+	public void setGrid(Grid<T>[] grid)
 	{
 		this.grid = grid;
 	}
@@ -84,7 +84,7 @@ public class GridGenerator
 	 */
 	public GridGenerator()
 	{
-		this.mainGrid = new Grid();
+		this.mainGrid = new Grid<T>();
 		this.grid = new Grid[getGridnumber()];
 	}
 
@@ -96,7 +96,7 @@ public class GridGenerator
 	 * @param linkChangeProb	Probability of changing link in new grid
 	 * @param gateChangeProb	Probability of changing gate's operation in new grid
 	 */
-	public GridGenerator(Grid initialGrid, double prob)
+	public GridGenerator(Grid<T> initialGrid, double prob)
 	{
 		this.mainGrid = initialGrid;
 		this.grid = new Grid[GridGenerator.getGridnumber()];
@@ -111,9 +111,9 @@ public class GridGenerator
 	{
 		for (int ii = 0; ii < this.getGridnumber(); ii++)
 		{
-			this.grid[ii] = new Grid(this.mainGrid);
+			this.grid[ii] = new Grid<T>(this.mainGrid);
 			this.grid[ii].reassignGatesOperation(this.probability);
-			this.grid[ii].relinkAllGatesInGrid(this.probability);
+			this.grid[ii].relinkAllGates(this.probability);
 			this.grid[ii].printGrid();
 		}
 	}

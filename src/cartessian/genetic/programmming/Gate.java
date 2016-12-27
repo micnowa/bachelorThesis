@@ -2,15 +2,13 @@ package cartessian.genetic.programmming;
 
 import java.util.LinkedList;
 
-import cartessian.genetic.programmming.operation.Operationable;
-
-public class Gate
+public class Gate<T>
 {
 	protected int i;
 	protected int j;
-	protected Operationable operation;
-	protected LinkedList<Gate> enteringGates = new LinkedList<Gate>();
-	protected LinkedList<Gate> exitingGates = new LinkedList<Gate>();
+	protected T operation;
+	protected LinkedList<Gate<T>> enteringGates = new LinkedList<Gate<T>>();
+	protected LinkedList<Gate<T>> exitingGates = new LinkedList<Gate<T>>();
 	
 	/**
 	 *	Default Constructor
@@ -26,7 +24,7 @@ public class Gate
 	 * @param  ii	i-position
 	 * @param  jj	j-position
 	 */
-	public Gate(Operationable operation,int ii,int jj)
+	public Gate(T operation,int ii,int jj)
 	{
 		this.operation = operation;
 		this.i = ii;
@@ -35,31 +33,21 @@ public class Gate
 
 
 	/**
-	 * @return Operation in the gate
-	 */
-	public Operationable getOperation()
-	{
-		return operation;
-	}
-
-	/**
 	 * Sets the operation in gate
 	 * 
 	 * @param operation
 	 */
-	public void setOperation(Operationable operation)
+	public void setOperation(T operation)
 	{
 		this.operation = operation;
 	}
 
 	/**
-	 *	Returns I-position of the gate
-	 *
-	 * @return      I-position
+	 * @return Operation in the gate
 	 */
-	public int getI()
+	public T getOperation()
 	{
-		return i;
+		return operation;
 	}
 
 	/**
@@ -73,13 +61,13 @@ public class Gate
 	}
 
 	/**
-	 *	Returns J-position of the gate
+	 *	Returns I-position of the gate
 	 *
-	 * @return	J-position
+	 * @return      I-position
 	 */
-	public int getJ()
+	public int getI()
 	{
-		return j;
+		return i;
 	}
 
 	/**
@@ -91,7 +79,18 @@ public class Gate
 	{
 		this.j = j;
 	}
-	
+
+	/**
+	 *	Returns J-position of the gate
+	 *
+	 * @return	J-position
+	 */
+	public int getJ()
+	{
+		return j;
+	}
+
+
 	/**
 	 *	Returns size of LinkedList of gates, gate is pointed to
 	 */
@@ -101,6 +100,26 @@ public class Gate
 	}
 	
 	
+	/**
+	 * Sets list of gate, that gate is pointed to
+	 *
+	 * @param  gatesEntering	List of gates, gate is pointed to
+	 */
+	public void setEnteringGates(LinkedList<Gate<T>> gatesEntering)
+	{
+		this.enteringGates = gatesEntering;
+	}
+
+	/**
+	 *	Returns LinkedList of gates, gate is pointed to
+	 *
+	 * @return LinkedList of gates, gate is pointed to
+	 */
+	public LinkedList<Gate<T>> getEnteringGates()
+	{
+		return enteringGates;
+	}
+
 	/**
 	 *	Returns size of LinkedList of gates, gate points to
 	 *
@@ -117,7 +136,7 @@ public class Gate
 	 *
 	 * @param  gate	Gate that should be added to gates, gate is pointed to
 	 */
-	void addEnteringGate(Gate gate)
+	void addEnteringGate(Gate<T> gate)
 	{
 		enteringGates.add(gate);
 	}
@@ -128,30 +147,9 @@ public class Gate
 	 *
 	 * @param  gate	Gate that should be added to gates, gate points to
 	 */
-	void addExitingGate(Gate gate)
+	void addExitingGate(Gate<T> gate)
 	{
 		exitingGates.add(gate);
-	}
-	
-	
-	/**
-	 *	Returns LinkedList of gates, gate is pointed to
-	 *
-	 * @return LinkedList of gates, gate is pointed to
-	 */
-	public LinkedList<Gate> getEnteringGates()
-	{
-		return enteringGates;
-	}
-	
-	/**
-	 * Sets list of gate, that gate is pointed to
-	 *
-	 * @param  gatesEntering	List of gates, gate is pointed to
-	 */
-	public void setEnteringGates(LinkedList<Gate> gatesEntering)
-	{
-		this.enteringGates = gatesEntering;
 	}
 	
 	
@@ -160,55 +158,20 @@ public class Gate
 	 *
 	 * @return	LinkedList<Gate> List of gates, gate points to 
 	 */
-	public LinkedList<Gate> getExitingGates()
+	public LinkedList<Gate<T>> getExitingGates()
 	{
 		return exitingGates;
 	}
+	
 	
 	/**
 	 *	Sets gates that gate points to
 	 * 
 	 * @param	gatesExiting LinkedList of gates exiting gate	
 	 */
-	public void setExitingGates(LinkedList<Gate> gatesExiting)
+	public void setExitingGates(LinkedList<Gate<T>> gatesExiting)
 	{
 		this.exitingGates = gatesExiting;
 	}
 	
-	
-	/**
-	 *	Returns the result of the operation with given arguments
-	 *
-	 * @param  p	first argument, with type set by user
-	 * @param  q	second argument, with type set by user
-	 * @return      <User type>	Result of operation
-	 */
-	public boolean result(boolean p, boolean q)
-	{
-		return false;
-	}
-	
-	
-	/**
-	 *	Prints on the standard output value returned by
-	 *	operation called with given arguments
-	 *
-	 * @param  p	first argument, with type set by user
-	 * @param  q	second argument, with type set by user
-	 */
-	public void printResult(boolean p, boolean q)
-	{
-		boolean r = this.result(p, q);
-		System.out.println("Result: " + r);
-	}
-	
-
-	/**
-	 *	Prints gate's operation on the standard output
-	 */
-	public void printLogicGate()
-	{
-		System.out.print("(" + this.getOperation() + ")");
-	}
-
 }
