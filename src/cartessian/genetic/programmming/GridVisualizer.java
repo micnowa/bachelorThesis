@@ -19,27 +19,24 @@ public class GridVisualizer<T> extends Canvas
 		setBackground(Color.WHITE);
 
 		int m = grid.getM();
-		Integer M = m;
 		int n = grid.getN();
-		Integer N = n;
 
-		System.out.println(m + "	" + n);
-		int X = 150;
+		int a = 150;
 
-		// g.drawRect((0 + 1)*50, (0 + 1)*50,(0 + 1)*50 + 10, (0 + 1)*50 + 10);
 		for (int ii = 0; ii < m; ii++)
 		{
 			for (int jj = 0; jj < n; jj++)
 			{
-				M = ii;
-				N = jj;
-				g.drawRect((ii + 1) * X, (jj + 1) * X, 30, 30);
-				g.drawString(M.toString(), (ii + 1) * X, (jj + 1) * X);
-				g.drawString(N.toString(), (ii + 1) * X + 10, (jj + 1) * X);
+				g.drawRect((jj + 1) * a, (ii + 1) * a, 30, 30);
+				g.setColor(Color.RED);
+				g.drawString(ii + "	" + jj, (jj + 1) * a, (ii + 1) * a);
+				g.setColor(Color.BLUE);
+				g.drawString(grid.getGates()[ii][jj].getOperation().toString(), (jj + 1) * a, (ii + 1) * a + 15);
+				g.setColor(Color.BLACK);
 			}
 		}
 
-		LinkedList<Gate<T>> gateList;// = new ArrayList<Gate<T>>();
+		LinkedList<Gate<T>> gateList;
 
 		for (int ii = 0; ii < m; ii++)
 		{
@@ -51,7 +48,7 @@ public class GridVisualizer<T> extends Canvas
 				{
 					int mm = gateList.get(kk).getI();
 					int nn = gateList.get(kk).getJ();
-					g.drawLine((ii + 1) * X, (jj + 1) * X + 5, (mm + 1) * X + 30, (nn + 1) * X + 30);
+					g.drawLine((jj + 1) * a + 5, (ii + 1) * a, (nn + 1) * a + 30, (mm + 1) * a + 30);
 
 				}
 			}

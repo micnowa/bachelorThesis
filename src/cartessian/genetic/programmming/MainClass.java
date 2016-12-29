@@ -18,8 +18,6 @@ public class MainClass extends Canvas
 		super();
 	}
 
-	
-
 	public static void main(String[] args)
 	{
 		// Available Operations
@@ -31,7 +29,7 @@ public class MainClass extends Canvas
 		operations.add(new Nand());
 
 		// Grid of operations
-		Grid<Operational<Boolean>> grid = new Grid<Operational<Boolean>>(operations, 5, 5, 1);
+		Grid<Operational<Boolean>> grid = new Grid<Operational<Boolean>>(operations,5, 8, 1);
 		grid.printGrid();
 
 		// Set of grids
@@ -45,7 +43,7 @@ public class MainClass extends Canvas
 		System.out.println(((Operational<Boolean>) ((grid.getGates())[0][0]).getOperation()).calculateValue(listBool));
 		
 		
-		GridVisualizer<Operational<Boolean>> m = new GridVisualizer<>(g.getGrid()[0]);
+		GridVisualizer<Operational<Boolean>> m = new GridVisualizer<>(g.getGrid()[3]);
 		JFrame f = new JFrame();
 		f.add(m);
 		f.setSize(1600, 900);
