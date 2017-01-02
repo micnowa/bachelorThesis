@@ -5,7 +5,7 @@ package cartessian.genetic.programmming;
  * @version 1.01
  *
  */
-public class GridGenerator<T>
+public class GridGenerator<T, U>
 {
 	/**
 	 * Number of copied grids
@@ -14,11 +14,11 @@ public class GridGenerator<T>
 	/**
 	 * Grid new grid are created from
 	 */
-	private Grid<T> mainGrid;
+	private Grid<T, U> mainGrid;
 	/**
 	 * Grids copied from main grid
 	 */
-	private Grid<T>[] grid;
+	private Grid<T, U>[] grid;
 	/**
 	 * Probability of changing link between two grids
 	 */
@@ -28,7 +28,7 @@ public class GridGenerator<T>
 	/**
 	 * @return mainGrid
 	 */
-	public Grid<T> getMainGrid()
+	public Grid<T, U> getMainGrid()
 	{
 		return mainGrid;
 	}
@@ -37,7 +37,7 @@ public class GridGenerator<T>
 	/**
 	 * @param mainGrid
 	 */
-	public void setMainGrid(Grid<T> mainGrid)
+	public void setMainGrid(Grid<T, U> mainGrid)
 	{
 		this.mainGrid = mainGrid;
 	}
@@ -46,7 +46,7 @@ public class GridGenerator<T>
 	/**
 	 * @return
 	 */
-	public Grid<T>[] getGrid()
+	public Grid<T, U>[] getGrid()
 	{
 		return grid;
 	}
@@ -55,7 +55,7 @@ public class GridGenerator<T>
 	/**
 	 * @param grid
 	 */
-	public void setGrid(Grid<T>[] grid)
+	public void setGrid(Grid<T, U>[] grid)
 	{
 		this.grid = grid;
 	}
@@ -82,10 +82,10 @@ public class GridGenerator<T>
 	/**
 	 * Default constructor
 	 */
-	public GridGenerator()
+	@SuppressWarnings("unchecked") public GridGenerator()
 	{
-		this.mainGrid = new Grid<T>();
-		this.grid = new Grid[getGridnumber()];
+		mainGrid = new Grid<T, U>();
+		grid = new Grid[getGridnumber()];
 	}
 
 	
@@ -96,12 +96,16 @@ public class GridGenerator<T>
 	 * @param linkChangeProb	Probability of changing link in new grid
 	 * @param gateChangeProb	Probability of changing gate's operation in new grid
 	 */
-	public GridGenerator(Grid<T> initialGrid, double prob)
+	@SuppressWarnings("unchecked") public GridGenerator(Grid<T, U> initialGrid, double prob)
 	{
-		this.mainGrid = initialGrid;
-		this.grid = new Grid[GridGenerator.getGridnumber()];
+		mainGrid = new Grid<T,U>(initialGrid);
+		grid = new Grid[GridGenerator.getGridnumber()];
+		for(int ii=0; ii<GridGenerator.getGridnumber(); ii++)
+		{
+			grid[ii] = new Grid<T,U>(mainGrid);
+		}
 		probability = prob;
-		this.generateNewGrids();
+		generateNewGrids();
 	}
 
 	/**
@@ -111,10 +115,10 @@ public class GridGenerator<T>
 	{
 		for (int ii = 0; ii < this.getGridnumber(); ii++)
 		{
-			this.grid[ii] = new Grid<T>(this.mainGrid);
-			this.grid[ii].reassignGatesOperation(this.probability);
-			this.grid[ii].relinkAllGates(this.probability);
-			this.grid[ii].printGrid();
+			grid[ii] = new Grid<T, U>(mainGrid);
+			grid[ii].reassignGatesOperation(probability);
+			grid[ii].relinkAllGates(probability);
+			grid[ii].printGrid();
 		}
 	}
 

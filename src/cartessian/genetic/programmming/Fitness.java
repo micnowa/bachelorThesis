@@ -73,7 +73,7 @@ public class Fitness
 
 	// ********************************************
 
-	double fit(Grid<Double> grid)
+	double fit(Grid<Double, Double> grid)
 	{
 		return 0;
 	}
