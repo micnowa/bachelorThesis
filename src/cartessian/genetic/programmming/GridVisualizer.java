@@ -63,7 +63,14 @@ public class GridVisualizer<T, U> extends Canvas
 			g.setColor(Color.RED);
 			int gateI = grid.getOutput()[ii].getEnteringGates().getFirst().getI();
 			int gateJ = grid.getOutput()[ii].getEnteringGates().getFirst().getJ();
-			g.drawLine((gateJ + 1) * a + 30, (gateI + 1) * a + 15 , 1500, ii * a + 50 + 15 + 30);
+			if (grid.getOutput()[ii].getEnteringGates().getFirst().getJ() == -1)
+			{
+				g.drawLine(30, gateI * a + 80 + 15, 1500 , ii * a + 50 + 15 + 30);
+			}
+			else
+			{
+				g.drawLine((gateJ + 1) * a + 30, (gateI + 1) * a + 15, 1500, ii * a + 50 + 15 + 30);
+			}
 		}
 
 	}

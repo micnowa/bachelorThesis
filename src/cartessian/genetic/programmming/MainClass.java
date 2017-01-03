@@ -26,7 +26,9 @@ public class MainClass extends Canvas
 		int rows = 5;
 		int columns = 7;
 		int enteringGates = 1;
-		double probability = 1;
+		double probability = 0.2;
+		
+		int sleepTime = 2;
 		
 		// Available Operations
 		ArrayList<Operational<Boolean>> operations = new ArrayList<Operational<Boolean>>();
@@ -48,35 +50,35 @@ public class MainClass extends Canvas
 		frame.add(gridVisual);
 		frame.setSize(1600, 900);
 		frame.setVisible(true);
-		TimeUnit.SECONDS.sleep(1);
+		TimeUnit.SECONDS.sleep(sleepTime);
 
 		GridVisualizer<Operational<Boolean>, Boolean> gridVisual0 = new GridVisualizer<Operational<Boolean>, Boolean>(g.getGrid()[0]);
 		JFrame frame0 = new JFrame();
 		frame0.add(gridVisual0);
 		frame0.setSize(1600, 900);
 		frame0.setVisible(true);
-		TimeUnit.SECONDS.sleep(1);
+		TimeUnit.SECONDS.sleep(sleepTime);
 		
 		GridVisualizer<Operational<Boolean>, Boolean> gridVisual1 = new GridVisualizer<Operational<Boolean>, Boolean>(g.getGrid()[1]);
 		JFrame frame1 = new JFrame();
 		frame1.add(gridVisual1);
 		frame1.setSize(1600, 900);
 		frame1.setVisible(true);
-		TimeUnit.SECONDS.sleep(1);
+		TimeUnit.SECONDS.sleep(sleepTime);
 		
 		GridVisualizer<Operational<Boolean>, Boolean> gridVisual2 = new GridVisualizer<Operational<Boolean>, Boolean>(g.getGrid()[2]);
 		JFrame frame2 = new JFrame();
 		frame2.add(gridVisual2);
 		frame2.setSize(1600, 900);
 		frame2.setVisible(true);
-		TimeUnit.SECONDS.sleep(1);
+		TimeUnit.SECONDS.sleep(sleepTime);
 		
 		GridVisualizer<Operational<Boolean>, Boolean> gridVisual3 = new GridVisualizer<Operational<Boolean>, Boolean>(g.getGrid()[3]);
 		JFrame frame3 = new JFrame();
 		frame3.add(gridVisual3);
 		frame3.setSize(1600, 900);
 		frame3.setVisible(true);
-		TimeUnit.SECONDS.sleep(1);
+		TimeUnit.SECONDS.sleep(sleepTime);
 	}
 }
 
