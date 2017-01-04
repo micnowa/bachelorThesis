@@ -1,11 +1,11 @@
 package cartessian.genetic.programmming.operation;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Xor implements Operational<Boolean>
 {
 
-	@Override public Boolean calculateValue(ArrayList<Boolean> list)
+	@Override public Boolean calculateValue(LinkedList<Boolean> list)
 	{
 		Boolean a = list.get(0);
 		Boolean b = list.get(1);

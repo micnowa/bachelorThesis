@@ -3,10 +3,18 @@ package cartessian.genetic.programmming;
 import java.awt.*;
 import java.util.LinkedList;
 
+/**
+ * @author Michał Nowaliński
+ *
+ * @param <T>
+ * @param <U>
+ */
 public class GridVisualizer<T, U> extends Canvas
 {
 	private static final long serialVersionUID = 1L;
 	private Grid<T, U> grid;
+	private int width;
+	private int height;
 
 	public GridVisualizer(Grid<T, U> grid)
 	{
@@ -14,6 +22,32 @@ public class GridVisualizer<T, U> extends Canvas
 		this.grid = grid;
 	}
 
+	public int getWidth()
+	{
+		return width;
+	}
+
+	public void setWidth(int width)
+	{
+		this.width = width;
+	}
+
+	public int getHeight()
+	{
+		return height;
+	}
+
+	public void setHeight(int height)
+	{
+		this.height = height;
+	}
+
+//	public void paint(Graphics g)
+//	{
+//		g.drawString("Grid", 40, 40);
+//		setBackground(Color.WHITE);
+//	}
+	
 	public void paint(Graphics g)
 	{
 		g.drawString("Grid", 40, 40);

@@ -4,11 +4,29 @@ import java.util.LinkedList;
 
 public class Gate<T, U>
 {
+	/**
+	 * Number of row
+	 */
 	protected int i;
+	/**
+	 * Number of column
+	 */
 	protected int j;
+	/**
+	 * Gate's operation
+	 */
 	protected T operation;
+	/**
+	 * Gate's value, retrieved after performed operation on values entering gate
+	 */
 	protected U value;
+	/**
+	 * List of gates, gate is pointed to
+	 */
 	protected LinkedList<Gate<T, U>> enteringGates = new LinkedList<Gate<T, U>>();
+	/**
+	 * List of gates, gate points to
+	 */
 	protected LinkedList<Gate<T, U>> exitingGates = new LinkedList<Gate<T, U>>();
 
 	/**
@@ -54,7 +72,7 @@ public class Gate<T, U>
 	}
 
 	/**
-	 * Sets gate's I-position
+	 * Sets row
 	 * 
 	 * @param i
 	 *            I-position
@@ -65,7 +83,7 @@ public class Gate<T, U>
 	}
 
 	/**
-	 * Returns I-position of the gate
+	 * Returns row
 	 * 
 	 * @return I-position
 	 */
@@ -75,7 +93,7 @@ public class Gate<T, U>
 	}
 
 	/**
-	 * Sets gate's J-position
+	 * Sets column
 	 * 
 	 * @param j
 	 *            J-position
@@ -86,7 +104,7 @@ public class Gate<T, U>
 	}
 
 	/**
-	 * Returns J-position of the gate
+	 * Returns column
 	 * 
 	 * @return J-position
 	 */
@@ -168,15 +186,6 @@ public class Gate<T, U>
 	}
 
 	/**
-	 * @param pos
-	 * @param gate
-	 */
-	void addExitingGateAt(int pos, Gate<T, U> gate)
-	{
-		exitingGates.add(pos, gate);
-	}
-
-	/**
 	 * Returns LinkedList of gates, gate points to
 	 * 
 	 * @return LinkedList<Gate> List of gates, gate points to
@@ -197,14 +206,23 @@ public class Gate<T, U>
 		this.exitingGates = gatesExiting;
 	}
 
+	/**
+	 * @return value hold in gate
+	 */
 	public U getValue()
 	{
 		return value;
 	}
 
+	/**
+	 * @param value value to be hold in gate
+	 */
 	public void setValue(U value)
 	{
 		this.value = value;
 	}
+	
+	
+	
 
 }
