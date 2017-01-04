@@ -2,6 +2,12 @@ package cartessian.genetic.programmming;
 
 import java.util.LinkedList;
 
+/**
+ * @author Michał Nowaliński
+ *
+ * @param <T>	Operation
+ * @param <U>	Operation's argument
+ */
 public class Gate<T, U>
 {
 	/**

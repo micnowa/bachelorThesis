@@ -6,8 +6,8 @@ import java.util.LinkedList;
 /**
  * @author Michał Nowaliński
  *
- * @param <T>
- * @param <U>
+ * @param <T>	Operation
+ * @param <U>	Operation's argument
  */
 public class GridVisualizer<T, U> extends Canvas
 {
@@ -19,7 +19,8 @@ public class GridVisualizer<T, U> extends Canvas
 	public GridVisualizer(Grid<T, U> grid)
 	{
 		super();
-		this.grid = grid;
+		this.grid = new Grid<T, U>(grid);
+		this.grid.calculateValueForEveryGate();
 	}
 
 	public int getWidth()
@@ -66,6 +67,7 @@ public class GridVisualizer<T, U> extends Canvas
 				g.drawString(ii + "	" + jj, (jj + 1) * a, (ii + 1) * a);
 				g.setColor(Color.BLUE);
 				g.drawString(grid.getGates()[ii][jj].getOperation().toString(), (jj + 1) * a, (ii + 1) * a + 15);
+				g.drawString(grid.getGates()[ii][jj].getValue().toString(), (jj + 1) * a, (ii + 1) * a + 30);
 				g.setColor(Color.BLACK);
 				gateList = grid.getGates()[ii][jj].getEnteringGates();
 				for (int kk = 0; kk < gateList.size(); kk++)
@@ -87,7 +89,11 @@ public class GridVisualizer<T, U> extends Canvas
 		for (int ii = 0; ii < grid.getInputNumber(); ii++)// Draw Input
 		{
 			g.fillRect(0, ii * a + 80, 30, 30);
+			g.setColor(Color.BLUE);
+			g.drawString(grid.getInput()[ii].getValue().toString() ,0, ii * a + 80);
+			g.setColor(Color.RED);
 			System.out.println(grid.getInput()[ii].getExitingGates().size() + "***" + ii);
+			
 		}
 
 		for (int ii = 0; ii < grid.getOutputNumber(); ii++)// Draw Output

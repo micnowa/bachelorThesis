@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
-
 import cartessian.genetic.programmming.operation.Operational;
 
 /**
  * @author Michał Nowaliński
- * 
+ *
+ * @param <T>	Operation
+ * @param <U>	Operations's argument
  */
 public class Grid<T, U>
 {
@@ -27,7 +27,7 @@ public class Grid<T, U>
 	private Gate<T, U> output[];
 
 	private Random randomGenerator;
-	private ArrayList<T> operationList;
+	private LinkedList<T> operationList;
 
 	/**
 	 * Default constructor. Set all fields with their default values
@@ -47,7 +47,7 @@ public class Grid<T, U>
 	 * @param nn
 	 * @param enteringGatesNum
 	 */
-	@SuppressWarnings("unchecked") public Grid(ArrayList<T> operations, int inputNum, int outputNum, int mm, int nn, int enteringGatesNum)
+	@SuppressWarnings("unchecked") public Grid(LinkedList<T> operations, int inputNum, int outputNum, int mm, int nn, int enteringGatesNum)
 	{
 		m = mm;
 		n = nn;
@@ -107,6 +107,7 @@ public class Grid<T, U>
 			input[jj].exitingGates = new LinkedList<Gate<T, U>>(grid.getInput()[jj].exitingGates);
 			input[jj].setJ(-1);
 			input[jj].setI(jj);
+			input[jj].value = grid.input[jj].value;
 		}
 
 		output = new Gate[outputNumber];
@@ -123,6 +124,7 @@ public class Grid<T, U>
 				gates[ii][jj] = new Gate<T, U>(grid.gates[ii][jj].getOperation(), ii, jj);
 				gates[ii][jj].enteringGates = new LinkedList<Gate<T, U>>(grid.getGates()[ii][jj].enteringGates);
 				gates[ii][jj].exitingGates = new LinkedList<Gate<T, U>>(grid.getGates()[ii][jj].exitingGates);
+				gates[ii][jj].value = grid.gates[ii][jj].value;
 			}
 		}
 	}
@@ -221,7 +223,7 @@ public class Grid<T, U>
 	/**
 	 * @return
 	 */
-	public ArrayList<T> getOperationList()
+	public LinkedList<T> getOperationList()
 	{
 		return operationList;
 	}
@@ -229,7 +231,7 @@ public class Grid<T, U>
 	/**
 	 * @param operationList
 	 */
-	public void setOperationList(ArrayList<T> operationList)
+	public void setOperationList(LinkedList<T> operationList)
 	{
 		this.operationList = operationList;
 	}
