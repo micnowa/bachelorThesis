@@ -16,4 +16,9 @@ public class Or implements Operational<Boolean>
 		return "OR";
 	}
 
+	@Override public int argsNumber()
+	{
+		// TODO Auto-generated method stub
+		return 2;
+	}
 }

@@ -1,22 +1,20 @@
 package cartessian.genetic.programmming;
 
-import java.nio.ByteBuffer;
-
-public class Fitness<T, U>
+public class Fitness<T>
 {
-	private Grid<T, U> grid;
-	private Gate<T, U> input[];
+	private Grid<T> grid;
+	private Gate<T> input[];
 	private int valuesNumber;
-	private U values[];
+	private T values[];
 	double fitness;
 	
-	public Fitness(Grid<T, U> grid)
+	@SuppressWarnings({ "unchecked", "unused" }) public Fitness(Grid<T> grid)
 	{
 		this.grid = new Grid<>(grid);
 		this.input = new Gate[grid.getInputNumber()];
-		for(Gate<T, U> gate : input)
+		for(Gate<T> gate : input)
 		{
-			gate = new Gate<T, U>();
+			gate = new Gate<T>();
 		}
 	}
 	
@@ -40,17 +38,17 @@ public class Fitness<T, U>
 		this.valuesNumber = valuesNumber;
 	}
 
-	public U[] getValues()
+	public T[] getValues()
 	{
 		return values;
 	}
 
-	public void setValues(U[] values)
+	public void setValues(T[] values)
 	{
 		this.values = values;
 	}
 
-	void checkGrid()
+	@SuppressWarnings("unused") void checkGrid()
 	{
 		Boolean[] bytes = new Boolean[grid.getInputNumber()];
 		for(int ii=0; ii < Math.pow(2, grid.getInputNumber()); ii++)

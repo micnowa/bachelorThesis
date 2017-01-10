@@ -18,4 +18,9 @@ public class Xor implements Operational<Boolean>
 		return "XOR";
 	}
 
+	@Override public int argsNumber()
+	{
+		// TODO Auto-generated method stub
+		return 2;
+	}
 }

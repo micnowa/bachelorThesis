@@ -53,11 +53,9 @@ public class MainClass extends Canvas
 		int input = 4;
 		int output = 6;
 		int rows = 5;
-		int columns = 9;
+		int columns = 5;
 		int enteringGates = 2;
 		double probability = 0.8;
-
-		int sleepTime = 1;
 
 		// Available Operations
 		LinkedList<Operational<Boolean>> operations = new LinkedList<Operational<Boolean>>();
@@ -68,7 +66,7 @@ public class MainClass extends Canvas
 		operations.add(new Nand());
 
 		// Grid of operations
-		Grid<Operational<Boolean>, Boolean> grid = new Grid<Operational<Boolean>, Boolean>(operations, input, output, rows, columns, enteringGates);
+		Grid<Boolean> grid = new Grid<Boolean>(operations, input, output, rows, columns, enteringGates);
 		Boolean tab[] = new Boolean[input];
 		for(int ii = 0; ii < input; ii++)
 		{
@@ -78,13 +76,14 @@ public class MainClass extends Canvas
 		grid.calculateValueForEveryGate();
 
 		// Set of grids
-		GridGenerator<Operational<Boolean>, Boolean> g = new GridGenerator<Operational<Boolean>, Boolean>(grid, probability);
+		GridGenerator<Boolean> g = new GridGenerator<Boolean>(grid, probability);
 		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 		{
 			g.getGrid()[ii].calculateValueForEveryGate();
 		}
-
-		GridVisualizer<Operational<Boolean>, Boolean> gridVisual = new GridVisualizer<>(g.getMainGrid());
+		
+		int sleepTime = 1;
+		GridVisualizer<Boolean> gridVisual = new GridVisualizer<>(g.getMainGrid());
 		JFrame frame = new JFrame();
 		frame.setTitle("Main Grid");
 		frame.add(gridVisual);
@@ -92,7 +91,7 @@ public class MainClass extends Canvas
 		frame.setVisible(true);
 		TimeUnit.SECONDS.sleep(sleepTime);
 
-		GridVisualizer<Operational<Boolean>, Boolean> gridVisual0 = new GridVisualizer<Operational<Boolean>, Boolean>(g.getGrid()[0]);
+		GridVisualizer<Boolean> gridVisual0 = new GridVisualizer<Boolean>(g.getGrid()[0]);
 		JFrame frame0 = new JFrame();
 		frame0.setTitle("Grid0");
 		frame0.add(gridVisual0);
@@ -100,7 +99,7 @@ public class MainClass extends Canvas
 		frame0.setVisible(true);
 		TimeUnit.SECONDS.sleep(sleepTime);
 
-		GridVisualizer<Operational<Boolean>, Boolean> gridVisual1 = new GridVisualizer<Operational<Boolean>, Boolean>(g.getGrid()[1]);
+		GridVisualizer<Boolean> gridVisual1 = new GridVisualizer<Boolean>(g.getGrid()[1]);
 		JFrame frame1 = new JFrame();
 		frame1.setTitle("Grid1");
 		frame1.add(gridVisual1);
@@ -109,7 +108,7 @@ public class MainClass extends Canvas
 		System.out.println(frame1.toString());
 		TimeUnit.SECONDS.sleep(sleepTime);
 
-		GridVisualizer<Operational<Boolean>, Boolean> gridVisual2 = new GridVisualizer<Operational<Boolean>, Boolean>(g.getGrid()[2]);
+		GridVisualizer<Boolean> gridVisual2 = new GridVisualizer<Boolean>(g.getGrid()[2]);
 		JFrame frame2 = new JFrame();
 		frame2.setTitle("Grid2");
 		frame2.add(gridVisual2);
@@ -117,7 +116,7 @@ public class MainClass extends Canvas
 		frame2.setVisible(true);
 		TimeUnit.SECONDS.sleep(sleepTime);
 
-		GridVisualizer<Operational<Boolean>, Boolean> gridVisual3 = new GridVisualizer<Operational<Boolean>, Boolean>(g.getGrid()[3]);
+		GridVisualizer<Boolean> gridVisual3 = new GridVisualizer<Boolean>(g.getGrid()[3]);
 		JFrame frame3 = new JFrame();
 		frame3.setTitle("Grid3");
 		frame3.add(gridVisual3);

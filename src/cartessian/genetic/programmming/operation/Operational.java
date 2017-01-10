@@ -5,4 +5,5 @@ import java.util.LinkedList;
 public interface Operational<T>
 {
 	public T calculateValue(LinkedList<T> list);
+	public int argsNumber();
 }

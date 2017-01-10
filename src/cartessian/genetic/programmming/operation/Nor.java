@@ -15,5 +15,11 @@ public class Nor implements Operational<Boolean>
 		// TODO Auto-generated method stub
 		return "NOR";
 	}
+	
+	@Override public int argsNumber()
+	{
+		// TODO Auto-generated method stub
+		return 2;
+	}
 
 }
