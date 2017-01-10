@@ -100,6 +100,7 @@ public class GridVisualizer<T, U> extends Canvas
 		{
 			g.setColor(Color.ORANGE);
 			g.fillRect(1500, ii * a + 80, 30, 30);
+			g.drawString(grid.getOutput()[ii].getValue().toString(), 1500, ii * a + 80);
 			g.setColor(Color.RED);
 			int gateI = grid.getOutput()[ii].getEnteringGates().getFirst().getI();
 			int gateJ = grid.getOutput()[ii].getEnteringGates().getFirst().getJ();

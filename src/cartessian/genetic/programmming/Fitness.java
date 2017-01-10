@@ -1,81 +1,63 @@
 package cartessian.genetic.programmming;
 
-import java.util.Scanner;
+import java.nio.ByteBuffer;
 
-public class Fitness
+public class Fitness<T, U>
 {
-
-	private int entriesNumber;
-	private boolean[][] trueFalseTable;
-	private Scanner keyboardValue;
-
-	public Fitness()
+	private Grid<T, U> grid;
+	private Gate<T, U> input[];
+	private int valuesNumber;
+	private U values[];
+	double fitness;
+	
+	public Fitness(Grid<T, U> grid)
 	{
-		System.out.println("Proszę wybrać, na ile wejść jest bramka!");
-		keyboardValue = new Scanner(System.in);
-		this.entriesNumber = keyboardValue.nextInt();
-		trueFalseTable = new boolean[entriesNumber][2];
-		for (int ii = 0; ii < entriesNumber; ii++)
+		this.grid = new Grid<>(grid);
+		this.input = new Gate[grid.getInputNumber()];
+		for(Gate<T, U> gate : input)
 		{
-			for (int jj = 1; jj < 3; jj++)
-			{
-				if (jj % 2 == 0)
-				{
-					trueFalseTable[ii][jj - 1] = false;
-				}
-				else
-				{
-					trueFalseTable[ii][jj - 1] = true;
-				}
-			}
+			gate = new Gate<T, U>();
 		}
 	}
-
-	public Fitness(int inNumber,boolean[][] innerValues)
+	
+	public double getFitness()
 	{
-		super();
-		this.entriesNumber = inNumber;
-		this.trueFalseTable = innerValues;
+		return fitness;
 	}
 
-	public int getInNumber()
+	public void setFitness(double fitness)
 	{
-		return entriesNumber;
+		this.fitness = fitness;
 	}
 
-	public void setInNumber(int inNumber)
+	public int getValuesNumber()
 	{
-		this.entriesNumber = inNumber;
+		return valuesNumber;
 	}
 
-	// ********************************************Tablica Wejść
-	public boolean[][] getInnerValues()
+	public void setValuesNumber(int valuesNumber)
 	{
-		return trueFalseTable;
+		this.valuesNumber = valuesNumber;
 	}
 
-	public void setInnerValues(boolean[][] innerValues)
+	public U[] getValues()
 	{
-		this.trueFalseTable = innerValues;
+		return values;
 	}
 
-	void showFitness()
+	public void setValues(U[] values)
 	{
-		System.out.println("Oto funkcja fitnessu:");
-		System.out.println("Ilość bramek: " + this.entriesNumber);
-		System.out.println("Tablica bramek:");
-		for (int ii = 0; ii < entriesNumber; ii++)
+		this.values = values;
+	}
+
+	void checkGrid()
+	{
+		Boolean[] bytes = new Boolean[grid.getInputNumber()];
+		for(int ii=0; ii < Math.pow(2, grid.getInputNumber()); ii++)
 		{
-			System.out.print(trueFalseTable[ii][0] + "  ");
-			System.out.println(trueFalseTable[ii][1]);
+			
 		}
-	}
-
-	// ********************************************
-
-	double fit(Grid<Double, Double> grid)
-	{
-		return 0;
+		grid.setInput(input);
 	}
 
 }

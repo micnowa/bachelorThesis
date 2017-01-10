@@ -16,8 +16,9 @@ import cartessian.genetic.programmming.operation.Operational;
 /**
  * @author Michał Nowaliński
  * 
- * 	Class showing program's work. It creates 5 grids with input values of user's type, and operations user implemented.
- *
+ *         Class showing program's work. It creates 5 grids with input values of
+ *         user's type, and operations user implemented.
+ * 
  */
 public class MainClass extends Canvas
 {
@@ -45,16 +46,15 @@ public class MainClass extends Canvas
 	public static boolean getRandomBoolean()
 	{
 		return Math.random() < 0.5;
-		// I tried another approaches here, still the same result
 	}
 
 	public static void main(String[] args) throws InterruptedException
 	{
 		int input = 4;
-		int output = 5;
+		int output = 6;
 		int rows = 5;
 		int columns = 9;
-		int enteringGates = 4;
+		int enteringGates = 2;
 		double probability = 0.8;
 
 		int sleepTime = 1;
@@ -69,7 +69,6 @@ public class MainClass extends Canvas
 
 		// Grid of operations
 		Grid<Operational<Boolean>, Boolean> grid = new Grid<Operational<Boolean>, Boolean>(operations, input, output, rows, columns, enteringGates);
-		grid.printGrid();
 		Boolean tab[] = new Boolean[input];
 		for(int ii = 0; ii < input; ii++)
 		{
@@ -80,6 +79,10 @@ public class MainClass extends Canvas
 
 		// Set of grids
 		GridGenerator<Operational<Boolean>, Boolean> g = new GridGenerator<Operational<Boolean>, Boolean>(grid, probability);
+		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
+		{
+			g.getGrid()[ii].calculateValueForEveryGate();
+		}
 
 		GridVisualizer<Operational<Boolean>, Boolean> gridVisual = new GridVisualizer<>(g.getMainGrid());
 		JFrame frame = new JFrame();
