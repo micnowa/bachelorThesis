@@ -2,14 +2,42 @@ package cartessian.genetic.programmming;
 
 import java.util.LinkedList;
 
-public class Gate<T, U>
+import cartessian.genetic.programmming.function.Functional;
+
+/**
+ * @author Michał Nowaliński
+ * 
+ * @param <T>
+ *            Operation
+ * @param <U>
+ *            Operation's argument
+ */
+public class Gate<T>
 {
+	/**
+	 * Number of row
+	 */
 	protected int i;
+	/**
+	 * Number of column
+	 */
 	protected int j;
-	protected T operation;
-	protected U value;
-	protected LinkedList<Gate<T, U>> enteringGates = new LinkedList<Gate<T, U>>();
-	protected LinkedList<Gate<T, U>> exitingGates = new LinkedList<Gate<T, U>>();
+	/**
+	 * Gate's operation
+	 */
+	protected Functional<T> function;
+	/**
+	 * Gate's value, retrieved after performed operation on values entering gate
+	 */
+	protected T value;
+	/**
+	 * List of gates, gate is pointed to
+	 */
+	protected LinkedList<Gate<T>> enteringGates = new LinkedList<Gate<T>>();
+	/**
+	 * List of gates, gate points to
+	 */
+	protected LinkedList<Gate<T>> exitingGates = new LinkedList<Gate<T>>();
 
 	/**
 	 * Default Constructor
@@ -28,9 +56,9 @@ public class Gate<T, U>
 	 * @param jj
 	 *            j-position
 	 */
-	public Gate(T operation, int ii, int jj)
+	public Gate(Functional<T> function, int ii, int jj)
 	{
-		this.operation = operation;
+		this.function = function;
 		this.i = ii;
 		this.j = jj;
 	}
@@ -40,21 +68,21 @@ public class Gate<T, U>
 	 * 
 	 * @param operation
 	 */
-	public void setOperation(T operation)
+	public void setFunction(Functional<T> function)
 	{
-		this.operation = operation;
+		this.function = function;
 	}
 
 	/**
-	 * @return Operation in the gate
+	 * @return Function in the gate
 	 */
-	public T getOperation()
+	public Functional<T> getFunction()
 	{
-		return operation;
+		return function;
 	}
 
 	/**
-	 * Sets gate's I-position
+	 * Sets row
 	 * 
 	 * @param i
 	 *            I-position
@@ -65,7 +93,7 @@ public class Gate<T, U>
 	}
 
 	/**
-	 * Returns I-position of the gate
+	 * Returns row
 	 * 
 	 * @return I-position
 	 */
@@ -75,7 +103,7 @@ public class Gate<T, U>
 	}
 
 	/**
-	 * Sets gate's J-position
+	 * Sets column
 	 * 
 	 * @param j
 	 *            J-position
@@ -86,7 +114,7 @@ public class Gate<T, U>
 	}
 
 	/**
-	 * Returns J-position of the gate
+	 * Returns column
 	 * 
 	 * @return J-position
 	 */
@@ -109,7 +137,7 @@ public class Gate<T, U>
 	 * @param gatesEntering
 	 *            List of gates, gate is pointed to
 	 */
-	public void setEnteringGates(LinkedList<Gate<T, U>> gatesEntering)
+	public void setEnteringGates(LinkedList<Gate<T>> gatesEntering)
 	{
 		this.enteringGates = gatesEntering;
 	}
@@ -119,7 +147,7 @@ public class Gate<T, U>
 	 * 
 	 * @return LinkedList of gates, gate is pointed to
 	 */
-	public LinkedList<Gate<T, U>> getEnteringGates()
+	public LinkedList<Gate<T>> getEnteringGates()
 	{
 		return enteringGates;
 	}
@@ -140,7 +168,7 @@ public class Gate<T, U>
 	 * @param gate
 	 *            Gate that should be added to gates, gate is pointed to
 	 */
-	void addEnteringGate(Gate<T, U> gate)
+	void addEnteringGate(Gate<T> gate)
 	{
 		enteringGates.add(gate);
 	}
@@ -151,7 +179,7 @@ public class Gate<T, U>
 	 * @param pos
 	 *            position which gate will be add at
 	 */
-	void addEnteringGateAt(int pos, Gate<T, U> gate)
+	void addEnteringGateAt(int pos, Gate<T> gate)
 	{
 		enteringGates.add(pos, gate);
 	}
@@ -162,18 +190,9 @@ public class Gate<T, U>
 	 * @param gate
 	 *            Gate that should be added to gates, gate points to
 	 */
-	void addExitingGate(Gate<T, U> gate)
+	void addExitingGate(Gate<T> gate)
 	{
 		exitingGates.add(gate);
-	}
-
-	/**
-	 * @param pos
-	 * @param gate
-	 */
-	void addExitingGateAt(int pos, Gate<T, U> gate)
-	{
-		exitingGates.add(pos, gate);
 	}
 
 	/**
@@ -181,7 +200,7 @@ public class Gate<T, U>
 	 * 
 	 * @return LinkedList<Gate> List of gates, gate points to
 	 */
-	public LinkedList<Gate<T, U>> getExitingGates()
+	public LinkedList<Gate<T>> getExitingGates()
 	{
 		return exitingGates;
 	}
@@ -192,17 +211,24 @@ public class Gate<T, U>
 	 * @param gatesExiting
 	 *            LinkedList of gates exiting gate
 	 */
-	public void setExitingGates(LinkedList<Gate<T, U>> gatesExiting)
+	public void setExitingGates(LinkedList<Gate<T>> gatesExiting)
 	{
 		this.exitingGates = gatesExiting;
 	}
 
-	public U getValue()
+	/**
+	 * @return value hold in gate
+	 */
+	public T getValue()
 	{
 		return value;
 	}
 
-	public void setValue(U value)
+	/**
+	 * @param value
+	 *            value to be hold in gate
+	 */
+	public void setValue(T value)
 	{
 		this.value = value;
 	}
