@@ -93,14 +93,18 @@ public class GridGenerator<T>
 	 */
 	@SuppressWarnings("unchecked") public GridGenerator(Grid<T> initialGrid, double prob)
 	{
+		System.out.println("Main grid creating ...");
 		mainGrid = new Grid<T>(initialGrid);
 		grid = new Grid[GridGenerator.getGridNumber()];
 		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 		{
+			System.out.println("Grid[" + ii + "] creating");
 			grid[ii] = new Grid<T>(mainGrid);
 		}
 		probability = prob;
+		
 		generateNewGrids();
+		System.out.println("Generations finished!");
 	}
 
 	/**
@@ -108,6 +112,7 @@ public class GridGenerator<T>
 	 */
 	public void generateNewGrids()
 	{
+		System.out.println("Realinking and reassigning");
 		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 		{
 			grid[ii].reassignGatesOperation(probability);

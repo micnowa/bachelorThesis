@@ -6,6 +6,7 @@ import java.util.Random;
 import cartessian.genetic.programmming.function.Functional;
 
 /**
+ * 
  * @author Michał Nowaliński
  * 
  * @param <T>
@@ -112,7 +113,7 @@ public class Grid<T>
 				gates[ii][jj] = new Gate<T>(functionList.get(randomGenerator.nextInt(functionList.size())), ii, jj);
 			}
 		}
-		linkAllGates();// Links creation
+		linkAllGates();
 	}
 
 	/**
@@ -335,6 +336,13 @@ public class Grid<T>
 	public void setInput(Gate<T>[] input)
 	{
 		this.input = input;
+		for(int ii = 0; ii < m; ii++)
+		{
+			for(int jj = 0; jj < n; jj++)
+			{
+				gates[ii][jj].setCounted(false);
+			}
+		}
 	}
 
 	/**
@@ -582,11 +590,19 @@ public class Grid<T>
 	public void setInputValues(T val[])
 	{
 		if(val.length != inputNumber) return;
-		int ii = 0;
+		int kk = 0;
 		for(T x : val)
 		{
-			input[ii].setValue(x);
-			ii++;
+			input[kk].setValue(x);
+			kk++;
+		}
+
+		for(int jj = 0; jj < n; jj++)
+		{
+			for(int ii = 0; ii < m; ii++)
+			{
+				gates[ii][jj].setCounted(false);
+			}
 		}
 	}
 
@@ -599,12 +615,15 @@ public class Grid<T>
 		{
 			for(int ii = 0; ii < m; ii++)
 			{
-				LinkedList<T> values = new LinkedList<T>();
-				for(int kk = 0; kk < enteringGatesNumber; kk++)
+				if(!gates[ii][jj].getCounted())
 				{
-					values.add(gates[ii][jj].getEnteringGates().get(kk).getValue());
+					LinkedList<T> values = new LinkedList<T>();
+					for(int kk = 0; kk < enteringGatesNumber; kk++)
+					{
+						values.add(gates[ii][jj].getEnteringGates().get(kk).getValue());
+					}
+					gates[ii][jj].setValue(gates[ii][jj].getFunction().calculateValue(values));
 				}
-				gates[ii][jj].setValue(gates[ii][jj].getFunction().calculateValue(values));
 			}
 		}
 
@@ -625,6 +644,12 @@ public class Grid<T>
 	 */
 	public T calculateGateValue(int ii, int jj)
 	{
+		if(jj == -1)
+		{
+			return input[ii].value;
+		}
+		if(gates[ii][jj].getCounted() == true) return gates[ii][jj].value;
+
 		T value = null;
 		LinkedList<T> list = new LinkedList<T>();
 		if(jj == 0)
@@ -634,12 +659,10 @@ public class Grid<T>
 			{
 				list.add(gates[ii][jj].getEnteringGates().get(kk).getValue());
 			}
+			gates[ii][jj].setCounted(true);
 			return gates[ii][jj].getFunction().calculateValue(list);
 		}
-		else if(jj == -1)
-		{
-			return input[ii].value;
-		}
+
 		else
 		{
 			int n = gates[ii][jj].getFunction().argsNumber();
@@ -648,18 +671,19 @@ public class Grid<T>
 				list.add(calculateGateValue(gates[ii][jj].getEnteringGates().get(kk).getI(), gates[ii][jj].getEnteringGates().get(kk).getJ()));
 			}
 		}
+		gates[ii][jj].setCounted(true);
 		value = gates[ii][jj].getFunction().calculateValue(list);
 		return value;
 	}
 
 	/**
-	 * Function returns value on chosen output. Input must be initialized!
+	 * Returns value on chosen output. Input must be initialized!
 	 * 
 	 * @param arg
 	 *            Number of output value is returned from
 	 * @return value on chosen output
 	 */
-	public T calculateValueOnOutput(int arg)
+	public T calculateOutputValue(int arg)
 	{
 		Gate<T> lastGate = output[arg].getEnteringGates().getFirst();
 		int ii = lastGate.getI();

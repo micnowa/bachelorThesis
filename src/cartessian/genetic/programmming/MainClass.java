@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-
 /**
  * @author Michał Nowaliński
  * 
@@ -50,23 +49,21 @@ public class MainClass extends Canvas
 
 	public static void main(String[] args) throws InterruptedException
 	{
-		int input = 5;
+		int input = 4;
 		int output = 5;
 		int rows = 5;
 		int columns = 9;
 		int enteringGates = 2;
-		double probability = 0.5;
+		double probability = 0.1;
 
-		
 		// Available Operations
 		LinkedList<Functional<Boolean>> operations = new LinkedList<Functional<Boolean>>();
-		operations.add(new And());
+		 operations.add(new And());
 		operations.add(new Or());
-		operations.add(new Nor());
-		operations.add(new Xor());
-		operations.add(new Nand());
+		 operations.add(new Nor());
+		 operations.add(new Xor());
+		 operations.add(new Nand());
 
-		
 		// Grid of operations
 		Grid<Boolean> grid = new Grid<Boolean>(operations, input, output, rows, columns, enteringGates);
 		Boolean tab[] = new Boolean[input];
@@ -77,7 +74,6 @@ public class MainClass extends Canvas
 		grid.setInputValues(tab);
 		grid.calculateValueForEveryGate();
 
-		
 		// Set of grids
 		GridGenerator<Boolean> gridGenerator = new GridGenerator<Boolean>(grid, probability);
 		gridGenerator.getMainGrid().calculateValueForEveryGate();
@@ -86,10 +82,9 @@ public class MainClass extends Canvas
 			gridGenerator.getGrid()[ii].calculateValueForEveryGate();
 		}
 
-		
-		//Graphs visualization
 		JFrame frame[] = new JFrame[5];
 		@SuppressWarnings("unchecked") GridVisualizer<Boolean> gridVisualizer[] = new GridVisualizer[5];
+
 		gridVisualizer[0] = new GridVisualizer<Boolean>(gridGenerator.getMainGrid());
 		for(int ii = 0; ii < 5; ii++)
 		{
@@ -122,11 +117,25 @@ public class MainClass extends Canvas
 				e.printStackTrace();
 			}
 		}
+		// ... Measure time ...
+		long startTime = System.currentTimeMillis();
 
-		//Checking fitness
 		LogicGatesFitter fitness = new LogicGatesFitter();
+
 		FourPlusOneAlogrithm<Boolean> fourPlusOne = new FourPlusOneAlogrithm<Boolean>(gridGenerator, grid, fitness);
-		fourPlusOne.run();
+		Grid<Boolean> finalGrid = fourPlusOne.generateProgramm();
+		finalGrid.calculateValueForEveryGate();//Needed for drawing
+
+		// ... Elapsed time is: ...
+		long estimatedTime = System.currentTimeMillis() - startTime;
+		System.out.println("Took: " + estimatedTime / 1000.0 + "s");
+
+		GridVisualizer<Boolean> finalGridVisualizer = new GridVisualizer<Boolean>(finalGrid);
+		JFrame finalFrame = new JFrame();
+		finalGridVisualizer.setActiveOutput(0);
+		finalFrame.add(finalGridVisualizer);
+		finalFrame.setVisible(true);
+		finalFrame.setSize(1600, 900);
 
 	}
 }

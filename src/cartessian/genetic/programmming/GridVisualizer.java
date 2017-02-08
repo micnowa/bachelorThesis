@@ -5,48 +5,92 @@ import java.util.LinkedList;
 
 public class GridVisualizer<T> extends Canvas
 {
+	/**
+	 * Serial Number
+	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Grid that is printed on canvas, with highlighted active gates leading to active output
+	 */
 	private Grid<T> grid;
+	
+	/**
+	 * Number of active output, it means output,which value is counted on
+	 */
 	private int activeOutput;
+	
+	/**
+	 * Size in pixels of side of square representing gate
+	 */
 	private int a;
+	
+	/**
+	 * Distance between squares representing output
+	 */
 	private int dist;
 
+	/**
+	 * Constructor of GridVisualizer
+	 * 
+	 * @param grid
+	 */
 	public GridVisualizer(Grid<T> grid)
 	{
-		super();
 		this.grid = grid;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getActiveOutput()
 	{
 		return activeOutput;
 	}
 
+	/**
+	 * @param activeOutput
+	 */
 	public void setActiveOutput(int activeOutput)
 	{
 		this.activeOutput = activeOutput;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getA()
 	{
 		return a;
 	}
 
+	/**
+	 * @param a
+	 */
 	public void setA(int a)
 	{
 		this.a = a;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getDist()
 	{
 		return dist;
 	}
 
+	/**
+	 * @param d
+	 */
 	public void setDist(int d)
 	{
 		this.dist = d;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.Canvas#paint(java.awt.Graphics)
+	 */
 	public void paint(Graphics g)
 	{
 		g.drawString("Grid", 40, 40);
@@ -126,6 +170,11 @@ public class GridVisualizer<T> extends Canvas
 		highlightGate(g2, ii, jj);
 	}
 
+	/**
+	 * @param g
+	 * @param ii
+	 * @param jj
+	 */
 	public void highlightGate(Graphics2D g, int ii, int jj)
 	{
 		if(jj == -1) return;

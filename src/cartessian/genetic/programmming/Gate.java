@@ -40,6 +40,11 @@ public class Gate<T>
 	protected LinkedList<Gate<T>> exitingGates = new LinkedList<Gate<T>>();
 
 	/**
+	 * Flag representing, whether value on gate is yet counted
+	 */
+	protected Boolean counted;
+
+	/**
 	 * Default Constructor
 	 */
 	public Gate()
@@ -61,6 +66,7 @@ public class Gate<T>
 		this.function = function;
 		this.i = ii;
 		this.j = jj;
+		this.counted = false;
 	}
 
 	/**
@@ -231,6 +237,22 @@ public class Gate<T>
 	public void setValue(T value)
 	{
 		this.value = value;
+	}
+
+	/**
+	 * @return
+	 */
+	public Boolean getCounted()
+	{
+		return counted;
+	}
+
+	/**
+	 * @param counted
+	 */
+	public void setCounted(Boolean counted)
+	{
+		this.counted = counted;
 	}
 
 }
