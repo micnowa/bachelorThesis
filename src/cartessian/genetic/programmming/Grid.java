@@ -1,66 +1,226 @@
 package cartessian.genetic.programmming;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
+import cartessian.genetic.programmming.function.Functional;
+
 /**
+ * Grid is a class responsible for execution user requirements. It has 3 main
+ * parts: input, gates and output. Input and output are gates held in
+ * 1-dimensional table. Gates are held in 2-dimensional table. Input and output
+ * have not got functions. Input has empty enteringGates, Output empty
+ * exitingGates.
+ * 
  * @author Michał Nowaliński
  * 
+ * @param <T>
+ *            Value type gates base on
  */
 public class Grid<T>
 {
+	/**
+	 * Number of rows
+	 */
 	private int m;
+	/**
+	 * Number of columns
+	 */
 	private int n;
+	/**
+	 * Number of gates entering single gate
+	 */
 	private int enteringGatesNumber;
+	/**
+	 * Two dimensional table of gate
+	 */
 	private Gate<T> gates[][];
-	private Random randomGenerator;
-	private int operationNumber;
-	private ArrayList<T> operationList;
+	/**
+	 * Number of gates in the input
+	 */
 	private int inputNumber;
+	/**
+	 * Table of input gates
+	 */
+	private Gate<T> input[];
+	/**
+	 * Number of gates in the output
+	 */
+	private int outputNumber;
+	/**
+	 * Table of output gates
+	 */
+	private Gate<T> output[];
+	/**
+	 * Randomness engine producing random numbers
+	 */
+	private Random randomGenerator;
+	/**
+	 * List of functions, that single gates can hold
+	 */
+	private LinkedList<Functional<T>> functionList;
+
+	/**
+	 * Probability link is forward, while linking gates
+	 */
+	private double recurrentProbability;
+
+	/**
+	 * Probability link will be switched
+	 */
+	private double probability;
 
 	/**
 	 * Default constructor. Set all fields with their default values
 	 */
 	public Grid()
 	{
-		super();
 		this.m = 0;
 		this.n = 0;
-		this.operationNumber = 0;
 		this.randomGenerator = new Random();
 	}
 
 	/**
-	 * @param operations
-	 *            List of possible operations
+	 * @param functions
+	 * @param inputNum
+	 * @param outputNum
 	 * @param mm
-	 *            Number of rows
 	 * @param nn
-	 *            Number of columns
-	 * @param enteringGatesNumber
-	 *            Number of argument one operation has
+	 * @param enteringGatesNum
 	 */
-	public Grid(ArrayList<T> operations, int mm, int nn, int enteringGatesNumber)
+	@SuppressWarnings("unchecked") public Grid(LinkedList<Functional<T>> functions, int inputNum, int outputNum, int mm, int nn, T initialValue, int enteringGatesNum, double probability, double recurrentProbability)
 	{
-		this.m = mm;
-		this.n = nn;
-		this.enteringGatesNumber = enteringGatesNumber;
-		this.operationNumber = operations.size();
-		this.operationList = operations;
-		this.gates = new Gate[this.m][this.n];
-		this.randomGenerator = new Random();
-		
-		int randomInt;
-		for (int ii = 0; ii < this.m; ii++)
+		m = mm;// Parameters setting
+		n = nn;
+		functionList = new LinkedList<Functional<T>>();
+		for(Functional<T> func : functions)
 		{
-			for (int jj = 0; jj < this.n; jj++)
+			functionList.add(func);
+		}
+		enteringGatesNumber = enteringGatesNum;
+		gates = new Gate[m][n];
+		randomGenerator = new Random();
+		this.recurrentProbability = recurrentProbability;
+		this.probability = probability;
+
+		inputNumber = inputNum;// Input setting
+		input = new Gate[inputNumber];
+		for(int ii = 0; ii < inputNumber; ii++)
+		{
+			input[ii] = new Gate<T>();
+			input[ii].setI(ii);
+			input[ii].setJ(-1);
+			input[ii].exitingGates = new LinkedList<Gate<T>>();
+		}
+
+		outputNumber = outputNum;// Output setting
+		output = new Gate[outputNumber];
+		for(int ii = 0; ii < outputNumber; ii++)
+		{
+			output[ii] = new Gate<T>();
+			output[ii].setI(ii);
+			output[ii].setJ(n);
+			output[ii].enteringGates = new LinkedList<Gate<T>>();
+		}
+
+		for(int jj = 0; jj < n; jj++)// Gates setting
+		{
+			for(int ii = 0; ii < m; ii++)
 			{
-				randomInt = randomGenerator.nextInt(this.operationNumber);
-				T op = this.operationList.get(randomInt);
-				gates[ii][jj] = new Gate<T>(op, ii, jj);
+				gates[ii][jj] = new Gate<T>(functionList.get(randomGenerator.nextInt(functionList.size())), ii, jj, initialValue);
 			}
 		}
-		this.linkAllGates();
+		linkAllGates();
+	}
+
+	/**
+	 * Copying constructor
+	 * 
+	 * @param grid
+	 */
+	@SuppressWarnings("unchecked") public Grid(Grid<T> grid)
+	{
+		m = grid.m;// Parameters setting
+		n = grid.n;
+		randomGenerator = new Random();
+		enteringGatesNumber = grid.getEnteringGatesNumber();
+		functionList = new LinkedList<Functional<T>>(grid.functionList);
+		for(Functional<T> func : grid.functionList)
+		{
+			functionList.add(func);
+		}
+		inputNumber = grid.inputNumber;
+		outputNumber = grid.outputNumber;
+		probability = grid.getProbability();
+		recurrentProbability = grid.getRecurrentProbability();
+
+		T initialValue = grid.getGates()[0][0].getValue();
+		input = new Gate[inputNumber];// Input setting
+		for(int ii = 0; ii < inputNumber; ii++)
+		{
+			input[ii] = new Gate<T>(null, ii, -1, initialValue);
+			input[ii].value = grid.input[ii].value;
+			input[ii].exitingGates = new LinkedList<Gate<T>>();
+		}
+
+		output = new Gate[outputNumber];// Output setting
+		for(int ii = 0; ii < outputNumber; ii++)
+		{
+			output[ii] = new Gate<T>(null, ii, n, initialValue);
+			output[ii].enteringGates = new LinkedList<Gate<T>>();
+		}
+
+		gates = new Gate[m][n];
+		for(int ii = 0; ii < m; ii++)// Gates setting
+		{
+			for(int jj = 0; jj < n; jj++)
+			{
+				gates[ii][jj] = new Gate<T>(grid.gates[ii][jj].getFunction(), ii, jj, initialValue);
+				gates[ii][jj].enteringGates = new LinkedList<Gate<T>>();
+				gates[ii][jj].exitingGates = new LinkedList<Gate<T>>();
+				gates[ii][jj].setValue(grid.getGates()[0][0].getValue());
+			}
+		}
+
+		for(int ii = 0; ii < m; ii++)// Gates setting
+		{
+			for(int jj = 0; jj < n; jj++)
+			{
+				for(int kk = 0; kk < enteringGatesNumber; kk++)
+				{
+					int xx = grid.getGates()[ii][jj].enteringGates.get(kk).getI();
+					int yy = grid.getGates()[ii][jj].enteringGates.get(kk).getJ();
+					if(yy == -1)
+					{
+						linkGates(input[xx], gates[ii][jj]);
+					}
+					else if(yy == n)
+					{
+						linkGates(gates[xx][yy], output[xx]);
+					}
+					else
+					{
+						linkGates(gates[xx][yy], gates[ii][jj]);
+					}
+				}
+				gates[ii][jj].value = grid.gates[ii][jj].value;
+			}
+		}
+
+		for(int kk = 0; kk < outputNumber; kk++)
+		{
+			int ii = grid.output[kk].enteringGates.getFirst().getI();
+			int jj = grid.output[kk].enteringGates.getFirst().getJ();
+			if(jj == -1)
+			{
+				linkGates(input[ii], output[kk]);
+			}
+			else
+			{
+				linkGates(gates[ii][jj], output[kk]);
+			}
+		}
+
 	}
 
 	/**
@@ -101,6 +261,26 @@ public class Grid<T>
 		this.n = n;
 	}
 
+	public double getRecurrentProbability()
+	{
+		return recurrentProbability;
+	}
+
+	public void setRecurrentProbability(double recurrentProbability)
+	{
+		this.recurrentProbability = recurrentProbability;
+	}
+
+	public double getProbability()
+	{
+		return probability;
+	}
+
+	public void setProbability(double probability)
+	{
+		this.probability = probability;
+	}
+
 	/**
 	 * @return two dimensional table of gates
 	 */
@@ -109,11 +289,28 @@ public class Grid<T>
 		return gates;
 	}
 
+	public void setGatesValue(T value)
+	{
+		for(int ii = 0; ii < m; ii++)
+		{
+			for(int jj = 0; jj < n; jj++)
+			{
+				gates[ii][jj].setValue(value);
+			}
+		}
+	}
+
+	/**
+	 * @return
+	 */
 	public int getEnteringGatesNumber()
 	{
 		return enteringGatesNumber;
 	}
 
+	/**
+	 * @param enteringGatesNumber
+	 */
 	public void setEnteringGatesNumber(int enteringGatesNumber)
 	{
 		this.enteringGatesNumber = enteringGatesNumber;
@@ -124,91 +321,89 @@ public class Grid<T>
 	 * 
 	 * @param logicGates
 	 */
-	public void setGates(Gate<T>[][] logicGates)
+	public void setGates(Gate<T>[][] gates)
 	{
-		this.gates = logicGates;
+		this.gates = gates;
 	}
 
 	/**
-	 * @return object creating random numbers
+	 * @return
 	 */
-	public Random getRandomGenerator()
+	public LinkedList<Functional<T>> getFunctionList()
 	{
-		return randomGenerator;
+		return functionList;
 	}
 
 	/**
-	 * Sets object creating random numbers
-	 * 
-	 * @param randomGenerator
-	 *            object creating random numbers
+	 * @param functionList
 	 */
-	public void setRandomGenerator(Random randomGenerator)
+	public void setFunctionList(LinkedList<Functional<T>> functionList)
 	{
-		this.randomGenerator = randomGenerator;
+		this.functionList = functionList;
 	}
 
 	/**
-	 * @return Number of different operations, single gate can have
+	 * @return
 	 */
-	public int getOperationNumber()
-	{
-		return operationNumber;
-	}
-
-	/**
-	 * @param operationNumber
-	 *            Sets number of different operations, single gate can have
-	 */
-	public void setOperationNumber(int operationNumber)
-	{
-		this.operationNumber = operationNumber;
-	}
-
-	public ArrayList<T> getOperationList()
-	{
-		return operationList;
-	}
-
-	public void setOperationList(ArrayList<T> operationList)
-	{
-		this.operationList = operationList;
-	}
-
 	public int getInputNumber()
 	{
 		return inputNumber;
 	}
 
+	/**
+	 * @param inputNumber
+	 */
 	public void setInputNumber(int inputNumber)
 	{
 		this.inputNumber = inputNumber;
 	}
 
 	/**
-	 * Copying constructor
-	 * 
-	 * @param grid
+	 * @return
 	 */
-	// TO TYSZ!!!
-	@SuppressWarnings("unchecked") public Grid(Grid<T> grid)
+	public int getOutputNumber()
 	{
-		this.m = grid.m;
-		this.n = grid.n;
-		this.operationNumber = grid.getOperationNumber();
-		this.randomGenerator = new Random();
-		this.enteringGatesNumber = grid.getEnteringGatesNumber();
-		this.operationList = grid.operationList;
-		this.gates = new Gate[this.m][this.n];
-		for (int ii = 0; ii < this.m; ii++)
-		{
-			for (int jj = 0; jj < this.n; jj++)
-			{
-				gates[ii][jj] = new Gate<T>(grid.gates[ii][jj].getOperation(), ii, jj);
-				this.gates[ii][jj].setEnteringGates(grid.gates[ii][jj].getEnteringGates());
-				this.gates[ii][jj].setExitingGates(grid.gates[ii][jj].getExitingGates());
-			}
-		}
+		return outputNumber;
+	}
+
+	/**
+	 * @param outputNumber
+	 */
+	public void setOutputNumber(int outputNumber)
+	{
+		this.outputNumber = outputNumber;
+	}
+
+	/**
+	 * @return
+	 */
+	public Gate<T>[] getInput()
+	{
+		return input;
+	}
+
+	/**
+	 * @param input
+	 */
+	public void setInput(Gate<T>[] input)
+	{
+		this.input = input;
+	}
+
+	/**
+	 * @return
+	 */
+	public Gate<T>[] getOutput()
+	{
+		return output;
+	}
+
+	/**
+	 * @param output
+	 */
+	public void setOutput(Gate<T>[] output)
+	{
+		this.output = output;
 	}
 
 	/**
@@ -216,15 +411,37 @@ public class Grid<T>
 	 */
 	void printGrid()
 	{
-		for (int ii = 0; ii < this.m; ii++)
+		for(int ii = 0; ii < m; ii++)
 		{
-			for (int jj = 0; jj < this.n; jj++)
+			for(int jj = 0; jj < n; jj++)
 			{
-				System.out.print("(" + gates[ii][jj].getI() + "," + gates[ii][jj].getJ() + ")=" + gates[ii][jj].getOperation() + "	");
+				System.out.print("(" + gates[ii][jj].getI() + "," + gates[ii][jj].getJ() + ")=" + gates[ii][jj].getFunction() + "	");
 			}
 			System.out.println();
 		}
 		System.out.println();
+
+		for(int ii = 0; ii < m; ii++)
+		{
+			for(int jj = 0; jj < n; jj++)
+			{
+				for(int kk = 0; kk < gates[ii][jj].enteringGates.size(); kk++)
+				{
+					int i = gates[ii][jj].enteringGates.get(kk).getI();
+					int j = gates[ii][jj].enteringGates.get(kk).getJ();
+					System.out.println(i + "," + j + "--->" + "(" + gates[ii][jj].getI() + "," + gates[ii][jj].getJ() + ")");
+				}
+				System.out.println();
+			}
+		}
+		System.out.println();
+
+		for(int ii = 0; ii < outputNumber; ii++)
+		{
+			int i = output[ii].enteringGates.getFirst().getI();
+			int j = output[ii].enteringGates.getFirst().getJ();
+			System.out.println(i + "," + j + "--->" + "(" + output[ii].getI() + "," + output[ii].getJ() + ")");
+		}
 	}
 
 	/**
@@ -240,6 +457,17 @@ public class Grid<T>
 	{
 		g2.addEnteringGate(g1);
 		g1.addExitingGate(g2);
+
+	}
+
+	/**
+	 * @param g1
+	 * @param g2
+	 */
+	void linkGates(Gate<T> g1, Gate<T> g2, int position)
+	{
+		g2.getEnteringGates().add(position, g1);
+		g1.getExitingGates().add(g2);
 	}
 
 	/**
@@ -256,44 +484,61 @@ public class Grid<T>
 	}
 
 	/**
-	 * Draws links between gates
+	 * Creates links between gates, input and output, gates can be linked to
+	 * following gates
 	 */
 	void linkAllGates()
 	{
 		int randomIi, randomJj;
-		System.out.println("Sorting by entering");
-		for (int jj = 1; jj < this.n; jj++)
+		double gateInputProbability;
+
+		for(int jj = 0; jj < n; jj++)
 		{
-			for (int ii = 0; ii < this.m; ii++)
+			gateInputProbability = (double) inputNumber / (inputNumber + jj * m);
+			for(int ii = 0; ii < m; ii++)
 			{
-				for(int kk= 0 ; kk < this.enteringGatesNumber; kk++ )
+				for(int kk = 0; kk < enteringGatesNumber; kk++)
 				{
-					randomIi = randomGenerator.nextInt(this.getM());
-					randomJj = randomGenerator.nextInt(jj);
-					this.linkGates(gates[randomIi][randomJj], gates[ii][jj]);
-					System.out.println(gates[ii][jj].getEnteringGates().get(kk).getI() + "," + gates[ii][jj].getEnteringGates().get(kk).getJ() + "--->" + ii + "," + jj);
+					if(recurrentProbability != 0 && randomGenerator.nextDouble() < recurrentProbability)
+					{
+						randomIi = randomGenerator.nextInt(m);
+						randomJj = jj + randomGenerator.nextInt(n - jj);
+						linkGates(gates[randomIi][randomJj], gates[ii][jj]);
+					}
+					else
+					{
+						if(randomGenerator.nextDouble() < gateInputProbability || jj == 0)
+						{
+							randomIi = randomGenerator.nextInt(inputNumber);
+							linkGates(input[randomIi], gates[ii][jj]);
+						}
+						else
+						{
+							randomIi = randomGenerator.nextInt(m);
+							randomJj = randomGenerator.nextInt(jj);
+							linkGates(gates[randomIi][randomJj], gates[ii][jj]);
+						}
+					}
 				}
 			}
 		}
 
-		System.out.println("Sorting by exiting");
-		int lim;
-		for (int jj = 0; jj < this.n - 1; jj++)
+		gateInputProbability = (double) inputNumber / (inputNumber + n * m);
+		for(int ii = 0; ii < outputNumber; ii++)
 		{
-			for (int ii = 0; ii < this.m; ii++)
+			if(randomGenerator.nextDouble() < gateInputProbability)
 			{
-				lim = gates[ii][jj].getExitingGates().size();
-				if (lim == 0) System.out.println(ii + "," + jj + "---> NULL");
-				else
-				{
-					for (int kk = 0; kk < lim; kk++)
-					{
-						System.out.println(ii + "," + jj + "--->" + gates[ii][jj].getExitingGates().get(kk).getI() + "," + gates[ii][jj].getExitingGates().get(kk).getJ());
-					}
-				}
-				System.out.println();
+				randomIi = randomGenerator.nextInt(inputNumber);
+				linkGates(input[randomIi], output[ii]);
+			}
+			else
+			{
+				randomIi = randomGenerator.nextInt(m);
+				randomJj = randomGenerator.nextInt(n);
+				linkGates(gates[randomIi][randomJj], output[ii]);
 			}
 		}
+
 	}
 
 	/**
@@ -301,20 +546,40 @@ public class Grid<T>
 	 * Always switches 2 link, because 2 links enter one gate
 	 * 
 	 * @param gate
-	 *            gate, whose link shall be switched
+	 *            gate, whose links shall be switched
 	 * @param linkProbability
 	 *            Probability of switching link
 	 */
-	private void relinkGate(Gate<T> gate, double linkProbability)
+	void relinkGate(Gate<T> gate)
 	{
-		for (int kk = 0; kk < this.enteringGatesNumber; kk++)
+		int column, row, jj = gate.getJ();
+		double gateInputProbability = (double) inputNumber / (inputNumber + jj * m);
+		for(int kk = 0; kk < enteringGatesNumber; kk++)
 		{
-			if (randomGenerator.nextDouble() < linkProbability)
+			if(randomGenerator.nextDouble() < probability)
 			{
-				this.removeLink(gate.getEnteringGates().get(kk), gate);
-				int column = randomGenerator.nextInt(gate.getJ());
-				int row = randomGenerator.nextInt(this.m);
-				this.linkGates(this.gates[row][column], gate);
+				removeLink(gate.getEnteringGates().get(kk), gate);
+
+				if(recurrentProbability != 0 && randomGenerator.nextDouble() < recurrentProbability)
+				{
+					row = randomGenerator.nextInt(m);
+					column = jj + randomGenerator.nextInt(n - jj);
+					linkGates(gates[row][column], gate, kk);
+				}
+				else
+				{
+					if(randomGenerator.nextDouble() < gateInputProbability || (jj == 0))
+					{
+						row = randomGenerator.nextInt(inputNumber);
+						linkGates(input[row], gate, kk);
+					}
+					else
+					{
+						column = randomGenerator.nextInt(jj);
+						row = randomGenerator.nextInt(m);
+						linkGates(gates[row][column], gate, kk);
+					}
+				}
 			}
 		}
 	}
@@ -326,17 +591,18 @@ public class Grid<T>
 	 * 
 	 * @param logicGateProbability
 	 */
-	void reassignGatesOperation(double logicGateProbability)
+	void reassignGatesOperation()
 	{
-		for (int jj = 0; jj < this.n; jj++)
-			for (int ii = 0; ii < this.m; ii++)
+		for(int jj = 0; jj < n; jj++)
+		{
+			for(int ii = 0; ii < m; ii++)
 			{
-				if (randomGenerator.nextDouble() < logicGateProbability)
+				if(randomGenerator.nextDouble() < probability)
 				{
-					this.gates[ii][jj].setOperation(this.operationList.get(randomGenerator.nextInt(this.getOperationNumber())));
+					gates[ii][jj].setFunction(functionList.get(randomGenerator.nextInt(functionList.size())));
 				}
 			}
-
+		}
 	}
 
 	/**
@@ -345,15 +611,136 @@ public class Grid<T>
 	 * @param linkProbability
 	 *            probability of switching link
 	 */
-	void relinkAllGates(double linkProbability)
+	void relinkAllGates()
 	{
-		for (int jj = 1; jj < this.n; jj++)
+		for(int jj = 0; jj < n; jj++)
 		{
-			for (int ii = 0; ii < this.m; ii++)
+			for(int ii = 0; ii < m; ii++)
 			{
-				this.relinkGate(this.gates[ii][jj], linkProbability);
+				relinkGate(gates[ii][jj]);
 			}
 		}
+
+		int column, row;
+		double inputProbability = (double) inputNumber / (inputNumber + m * n);
+		for(int ii = 0; ii < outputNumber; ii++)
+		{
+			if(randomGenerator.nextDouble() < probability)
+			{
+				removeLink(output[ii].getEnteringGates().getFirst(), output[ii]);
+				if(randomGenerator.nextDouble() < inputProbability)
+				{
+					row = randomGenerator.nextInt(inputNumber);
+					linkGates(input[row], output[ii]);
+				}
+				else
+				{
+					column = randomGenerator.nextInt(n);
+					row = randomGenerator.nextInt(m);
+					linkGates(gates[row][column], output[ii]);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sets values on input. It also sets flag counted with false for every
+	 * gate.
+	 * 
+	 * @param val
+	 *            Table of values, input shall be set with
+	 */
+	public void setInputValues(T val[])
+	{
+		if(val.length != inputNumber) return;
+		int kk = 0;
+		for(T x : val)
+		{
+			input[kk].setValue(x);
+			kk++;
+		}
+	}
+
+	/**
+	 * Counts value for every gate
+	 */
+	public void calculateValueForEveryGate()
+	{
+		for(int jj = 0; jj < n; jj++)
+		{
+			for(int ii = 0; ii < m; ii++)
+			{
+				LinkedList<T> values = new LinkedList<T>();
+				for(int kk = 0; kk < enteringGatesNumber; kk++)
+				{
+					T value = gates[ii][jj].getEnteringGates().get(kk).getValue();
+					values.add(value);
+				}
+				gates[ii][jj].setValue(gates[ii][jj].getFunction().calculateValue(values));
+			}
+		}
+
+		for(int jj = 0; jj < outputNumber; jj++)
+		{
+			output[jj].setValue(output[jj].getEnteringGates().getFirst().getValue());
+		}
+	}
+
+	/**
+	 * Recursive function counting value for gate
+	 * 
+	 * @param ii
+	 *            Gate's rows
+	 * @param jj
+	 *            Gate's column
+	 * 
+	 * @return Gate's value
+	 */
+	public T calculateGateValue(int ii, int jj)
+	{
+		LinkedList<T> valueList = new LinkedList<T>();
+		LinkedList<Gate<T>> gateList;
+		if(jj == -1)
+		{
+			return input[ii].getValue();
+		}
+		else if(recurrentProbability != 0 || jj == 0)
+		{
+			gateList = gates[ii][jj].getEnteringGates();
+			for(Gate<T> gate : gateList)
+			{
+				valueList.add(gate.getValue());
+			}
+		}
+		else
+		{
+			gateList = gates[ii][jj].getEnteringGates();
+			for(Gate<T> gate : gateList)
+			{
+				int iPrim = gate.getI();
+				int jPrim = gate.getJ();
+				valueList.add(calculateGateValue(iPrim, jPrim));
+			}
+		}
+		gates[ii][jj].setValue(gates[ii][jj].getFunction().calculateValue(valueList));
+
+		return gates[ii][jj].getValue();
+	}
+
+	/**
+	 * Returns value on chosen output. Input must be initialized!
+	 * 
+	 * @param arg
+	 *            Number of output value is returned from
+	 * 
+	 * @return value on chosen output
+	 */
+	public T calculateOutputValue(int arg)
+	{
+		Gate<T> lastGate = output[arg].getEnteringGates().getFirst();
+		int ii = lastGate.getI();
+		int jj = lastGate.getJ();
+		return calculateGateValue(ii, jj);
 	}
 
 }

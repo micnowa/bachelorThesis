@@ -2,58 +2,100 @@ package cartessian.genetic.programmming;
 
 import java.util.LinkedList;
 
+import cartessian.genetic.programmming.function.Functional;
+
+/**
+ * Class representing node in grid of functions. It is connected with other
+ * gates. Such links are represented by two lists(enteringGates, exitingGates).
+ * Position of grid is ii- number of row, jj- number o column. Negative value of
+ * jj means gates is an input gate. Each gate has function and value(resoult of
+ * function with values form gates entering this gate).
+ * 
+ * @author Michał Nowaliński
+ * 
+ * @param <T>
+ *            Operation
+ */
 public class Gate<T>
 {
-	protected int i;
-	protected int j;
-	protected T operation;
-	protected LinkedList<Gate<T>> enteringGates = new LinkedList<Gate<T>>();
-	protected LinkedList<Gate<T>> exitingGates = new LinkedList<Gate<T>>();
-	
 	/**
-	 *	Default Constructor
+	 * Number of row
+	 */
+	protected int i;
+
+	/**
+	 * Number of column
+	 */
+	protected int j;
+
+	/**
+	 * Gate's operation
+	 */
+	protected Functional<T> function;
+
+	/**
+	 * Gate's value, retrieved after performed operation on values entering gate
+	 */
+	protected T value;
+
+	/**
+	 * List of gates, gate is pointed to
+	 */
+	protected LinkedList<Gate<T>> enteringGates = new LinkedList<Gate<T>>();
+
+	/**
+	 * List of gates, gate points to
+	 */
+	protected LinkedList<Gate<T>> exitingGates = new LinkedList<Gate<T>>();
+
+	/**
+	 * Default Constructor
 	 */
 	public Gate()
 	{
 	}
 
 	/**
-	 *	Constructor with arguments
-	 *
-	 * @param  operation	operation in the gate
-	 * @param  ii	i-position
-	 * @param  jj	j-position
+	 * Constructor with arguments
+	 * 
+	 * @param operation
+	 *            operation in the gate
+	 * @param ii
+	 *            i-position
+	 * @param jj
+	 *            j-position
 	 */
-	public Gate(T operation,int ii,int jj)
+	public Gate(Functional<T> function, int ii, int jj, T initialValue)
 	{
-		this.operation = operation;
+		this.function = function;
 		this.i = ii;
 		this.j = jj;
+		this.value = initialValue;
 	}
-
 
 	/**
 	 * Sets the operation in gate
 	 * 
 	 * @param operation
 	 */
-	public void setOperation(T operation)
+	public void setFunction(Functional<T> function)
 	{
-		this.operation = operation;
+		this.function = function;
 	}
 
 	/**
-	 * @return Operation in the gate
+	 * @return Function in the gate
 	 */
-	public T getOperation()
+	public Functional<T> getFunction()
 	{
-		return operation;
+		return function;
 	}
 
 	/**
-	 *	Sets gate's I-position
-	 *
-	 * @param  i	I-position
+	 * Sets row
+	 * 
+	 * @param i
+	 *            I-position
 	 */
 	public void setI(int i)
 	{
@@ -61,9 +103,9 @@ public class Gate<T>
 	}
 
 	/**
-	 *	Returns I-position of the gate
-	 *
-	 * @return      I-position
+	 * Returns row
+	 * 
+	 * @return I-position
 	 */
 	public int getI()
 	{
@@ -71,9 +113,10 @@ public class Gate<T>
 	}
 
 	/**
-	 *	Sets gate's J-position
-	 *
-	 * @param  j	J-position
+	 * Sets column
+	 * 
+	 * @param j
+	 *            J-position
 	 */
 	public void setJ(int j)
 	{
@@ -81,29 +124,28 @@ public class Gate<T>
 	}
 
 	/**
-	 *	Returns J-position of the gate
-	 *
-	 * @return	J-position
+	 * Returns column
+	 * 
+	 * @return J-position
 	 */
 	public int getJ()
 	{
 		return j;
 	}
 
-
 	/**
-	 *	Returns size of LinkedList of gates, gate is pointed to
+	 * Returns size of LinkedList of gates, gate is pointed to
 	 */
 	public int getEnteringGatesNumber()
 	{
 		return enteringGates.size();
 	}
-	
-	
+
 	/**
 	 * Sets list of gate, that gate is pointed to
-	 *
-	 * @param  gatesEntering	List of gates, gate is pointed to
+	 * 
+	 * @param gatesEntering
+	 *            List of gates, gate is pointed to
 	 */
 	public void setEnteringGates(LinkedList<Gate<T>> gatesEntering)
 	{
@@ -111,8 +153,8 @@ public class Gate<T>
 	}
 
 	/**
-	 *	Returns LinkedList of gates, gate is pointed to
-	 *
+	 * Returns LinkedList of gates, gate is pointed to
+	 * 
 	 * @return LinkedList of gates, gate is pointed to
 	 */
 	public LinkedList<Gate<T>> getEnteringGates()
@@ -121,57 +163,86 @@ public class Gate<T>
 	}
 
 	/**
-	 *	Returns size of LinkedList of gates, gate points to
-	 *
-	 * @return	Size of LinkedList of gates, gate points to
+	 * Returns size of LinkedList of gates, gate points to
+	 * 
+	 * @return Size of LinkedList of gates, gate points to
 	 */
 	public int getExitingGatesNumber()
 	{
 		return exitingGates.size();
 	}
+
 	
-	
+
 	/**
-	 *	Adds a gate to LinkedList of gates, gate is pointed to
-	 *
-	 * @param  gate	Gate that should be added to gates, gate is pointed to
-	 */
-	void addEnteringGate(Gate<T> gate)
-	{
-		enteringGates.add(gate);
-	}
-	
-	
-	/**
-	 *	Adds a gate to LinkedList of gates, gate points to
-	 *
-	 * @param  gate	Gate that should be added to gates, gate points to
-	 */
-	void addExitingGate(Gate<T> gate)
-	{
-		exitingGates.add(gate);
-	}
-	
-	
-	/**
-	 *	Returns LinkedList of gates, gate points to
-	 *
-	 * @return	LinkedList<Gate> List of gates, gate points to 
+	 * Returns LinkedList of gates, gate points to
+	 * 
+	 * @return LinkedList<Gate> List of gates, gate points to
 	 */
 	public LinkedList<Gate<T>> getExitingGates()
 	{
 		return exitingGates;
 	}
-	
-	
+
 	/**
-	 *	Sets gates that gate points to
+	 * Sets gates that gate points to
 	 * 
-	 * @param	gatesExiting LinkedList of gates exiting gate	
+	 * @param gatesExiting
+	 *            LinkedList of gates exiting gate
 	 */
 	public void setExitingGates(LinkedList<Gate<T>> gatesExiting)
 	{
 		this.exitingGates = gatesExiting;
 	}
-	
+
+	/**
+	 * @return value hold in gate
+	 */
+	public T getValue()
+	{
+		return value;
+	}
+
+	/**
+	 * @param value
+	 *            value to be hold in gate
+	 */
+	public void setValue(T value)
+	{
+		this.value = value;
+	}
+
+	/**
+	 * Adds a gate to LinkedList of gates, gate is pointed to
+	 * 
+	 * @param gate
+	 *            Gate that should be added to gates, gate is pointed to
+	 */
+	void addEnteringGate(Gate<T> gate)
+	{
+		enteringGates.add(gate);
+	}
+
+	/**
+	 * @param gate
+	 *            gate to be added gate to
+	 * @param pos
+	 *            position which gate will be add at
+	 */
+	void addEnteringGateAt(int pos, Gate<T> gate)
+	{
+		enteringGates.add(pos, gate);
+	}
+
+	/**
+	 * Adds a gate to LinkedList of gates, gate points to
+	 * 
+	 * @param gate
+	 *            Gate that should be added to gates, gate points to
+	 */
+	void addExitingGate(Gate<T> gate)
+	{
+		exitingGates.add(gate);
+	}
+
 }

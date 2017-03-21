@@ -1,9 +1,12 @@
 package cartessian.genetic.programmming;
 
 /**
+ * Class creating 4 new grids based on main Grid. It takes main grid and draws
+ * new links between gates and reassigns functions with given probability.
+ * 
  * @author Michał Nowaliński
  * @version 1.01
- *
+ * 
  */
 public class GridGenerator<T>
 {
@@ -11,20 +14,17 @@ public class GridGenerator<T>
 	 * Number of copied grids
 	 */
 	private final static int gridNumber = 4;
+
 	/**
 	 * Grid new grid are created from
 	 */
 	private Grid<T> mainGrid;
+
 	/**
 	 * Grids copied from main grid
 	 */
 	private Grid<T>[] grid;
-	/**
-	 * Probability of changing link between two grids
-	 */
-	private double probability;
-	
-	
+
 	/**
 	 * @return mainGrid
 	 */
@@ -33,7 +33,6 @@ public class GridGenerator<T>
 		return mainGrid;
 	}
 
-	
 	/**
 	 * @param mainGrid
 	 */
@@ -42,7 +41,6 @@ public class GridGenerator<T>
 		this.mainGrid = mainGrid;
 	}
 
-	
 	/**
 	 * @return
 	 */
@@ -51,7 +49,6 @@ public class GridGenerator<T>
 		return grid;
 	}
 
-	
 	/**
 	 * @param grid
 	 */
@@ -60,69 +57,57 @@ public class GridGenerator<T>
 		this.grid = grid;
 	}
 
-	
-	/**
-	 * @return
-	 */
-	public double getOperationChangeProbability()
-	{
-		return probability;
-	}
-
-	
-	/**
-	 * @param operationChangeProbability
-	 */
-	public void setProbability(double probability)
-	{
-		this.probability = probability;
-	}
-
-
 	/**
 	 * Default constructor
 	 */
-	public GridGenerator()
+	@SuppressWarnings("unchecked") public GridGenerator()
 	{
-		this.mainGrid = new Grid<T>();
-		this.grid = new Grid[getGridnumber()];
+		mainGrid = new Grid<T>();
+		grid = new Grid[getGridNumber()];
 	}
 
-	
 	/**
 	 * Constructor with parameters
 	 * 
-	 * @param initialGrid	Main grid, new grids are based on
-	 * @param linkChangeProb	Probability of changing link in new grid
-	 * @param gateChangeProb	Probability of changing gate's operation in new grid
+	 * @param initialGrid
+	 *            Main grid, new grids are based on
+	 * @param linkChangeProb
+	 *            Probability of changing link in new grid
+	 * @param gateChangeProb
+	 *            Probability of changing gate's operation in new grid
 	 */
-	public GridGenerator(Grid<T> initialGrid, double prob)
+	@SuppressWarnings("unchecked") public GridGenerator(Grid<T> initialGrid, double probability, double recurrentProbability)
 	{
-		this.mainGrid = initialGrid;
-		this.grid = new Grid[GridGenerator.getGridnumber()];
-		probability = prob;
-		this.generateNewGrids();
+		System.out.println("Main grid creating ...");
+		mainGrid = new Grid<T>(initialGrid);
+		grid = new Grid[GridGenerator.getGridNumber()];
+		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
+		{
+			System.out.println("Grid[" + ii + "] creating");
+			grid[ii] = new Grid<T>(mainGrid);
+		}
+
+		generateNewGrids();
+		System.out.println("Generations finished!");
 	}
 
 	/**
 	 * Generates new 4 grid based on main grid
 	 */
-	@SuppressWarnings("static-access") public void generateNewGrids()
+	public void generateNewGrids()
 	{
-		for (int ii = 0; ii < this.getGridnumber(); ii++)
+		System.out.println("Realinking and reassigning");
+		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 		{
-			this.grid[ii] = new Grid<T>(this.mainGrid);
-			this.grid[ii].reassignGatesOperation(this.probability);
-			this.grid[ii].relinkAllGates(this.probability);
-			this.grid[ii].printGrid();
+			grid[ii].reassignGatesOperation();
+			grid[ii].relinkAllGates();
 		}
 	}
 
-	
 	/**
-	 * @return	Number of new grids
+	 * @return Number of new grids
 	 */
-	public static int getGridnumber()
+	public static int getGridNumber()
 	{
 		return gridNumber;
 	}
