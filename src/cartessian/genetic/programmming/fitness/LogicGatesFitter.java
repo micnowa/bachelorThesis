@@ -1,16 +1,29 @@
 package cartessian.genetic.programmming.fitness;
 
-import java.util.LinkedList;
-
 import cartessian.genetic.programmming.Grid;
-import cartessian.genetic.programmming.function.And;
-import cartessian.genetic.programmming.function.Functional;
 
+/**
+ * Class implementing interface Fitness with type Boolean. It checks, whether
+ * grid on output 0 return logic sum of all input gates. In method public int
+ * getGridFitness(Grid<Boolean> grid) it sets output with all possible values.
+ * If there is at least one false output 0 shall return false, if all are true
+ * then true. Checks in how many cases grid return proper values. This is its
+ * fitness. Method public int getMaxFitness(Grid<Boolean> grid) returns
+ * maxFitness. It is equal to all possibilities, that is 2 to power of
+ * inputNumber.
+ * 
+ * @author Michał Nowaliński
+ * 
+ */
 public class LogicGatesFitter implements Fitness<Boolean>
 {
 
-	/* (non-Javadoc)
-	 * @see cartessian.genetic.programmming.fitness.Fitness#getGridFitness(cartessian.genetic.programmming.Grid)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * cartessian.genetic.programmming.fitness.Fitness#getGridFitness(cartessian
+	 * .genetic.programmming.Grid)
 	 */
 	@Override public int getGridFitness(Grid<Boolean> grid)
 	{
@@ -18,7 +31,7 @@ public class LogicGatesFitter implements Fitness<Boolean>
 		int possibilities = (int) Math.pow(2, inputNumber);
 		int score = 0;
 		Boolean tab[] = new Boolean[inputNumber];
-		
+
 		for(int jj = 0; jj < inputNumber; jj++)
 		{
 			if(grid.getInput()[jj].getExitingGates().size() == 0) return 0;
@@ -26,24 +39,17 @@ public class LogicGatesFitter implements Fitness<Boolean>
 		for(int ii = 0; ii < possibilities; ii++)
 		{
 			tab = bytesTable(inputNumber, ii);
-
 			grid.setInputValues(tab);
-
-			Boolean value;
-			LinkedList<Boolean> valueList = new LinkedList<Boolean>();
-			valueList.add(tab[0]);
-			valueList.add(tab[1]);
-			Functional<Boolean> operator = new And();
-			value = operator.calculateValue(valueList);
-			for(int jj = 2; jj < inputNumber; jj++)
+			if(grid.getRecurrentProbability() != 0)
 			{
-				valueList.clear();
-				valueList.add(value);
-				valueList.add(tab[jj]);
-				value = operator.calculateValue(valueList);
+				grid.setGatesValue(false);
 			}
-
-			if(grid.calculateOutputValue(0) == value)
+			grid.calculateValueForEveryGate();
+			if(ii != (possibilities - 1) && grid.calculateOutputValue(0) == false)
+			{
+				score++;
+			}
+			else if(ii == (possibilities - 1) && grid.calculateOutputValue(0) == true)
 			{
 				score++;
 			}
@@ -53,9 +59,17 @@ public class LogicGatesFitter implements Fitness<Boolean>
 	}
 
 	/**
+	 * Returns table of Booleans. It convert integer to binary number, where
+	 * false represents 0 and true 1.
+	 * 
 	 * @param N
+	 *            Table's length
 	 * @param ii
-	 * @return
+	 *            Number
+	 * @return Table of Booleans
+	 * 
+	 * @warning Number's length must be specified. It must size of number of
+	 *          bytes enough to represent number by binary sequence.
 	 */
 	Boolean[] bytesTable(int N, int ii)
 	{
@@ -83,8 +97,12 @@ public class LogicGatesFitter implements Fitness<Boolean>
 		return tab;
 	}
 
-	/* (non-Javadoc)
-	 * @see cartessian.genetic.programmming.fitness.Fitness#getMaxFitness(cartessian.genetic.programmming.Grid)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * cartessian.genetic.programmming.fitness.Fitness#getMaxFitness(cartessian
+	 * .genetic.programmming.Grid)
 	 */
 	@Override public int getMaxFitness(Grid<Boolean> grid)
 	{

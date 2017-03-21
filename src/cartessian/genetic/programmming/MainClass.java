@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -42,40 +43,37 @@ public class MainClass extends Canvas
 		ImageIO.write(img, "png", new File("/home/ubuntu/Obrazy/" + fileName));
 	}
 
-	public static boolean getRandomBoolean()
-	{
-		return Math.random() < 0.5;
-	}
-
 	public static void main(String[] args) throws InterruptedException
 	{
-		int input = 4;
+		int input = 5;
 		int output = 5;
 		int rows = 5;
 		int columns = 9;
 		int enteringGates = 2;
-		double probability = 0.1;
+		double probability = 0.05;
+		double recurrentProbability = 0.01;
+		Random rand = new Random();
 
 		// Available Operations
 		LinkedList<Functional<Boolean>> operations = new LinkedList<Functional<Boolean>>();
-		 operations.add(new And());
+		operations.add(new And());
 		operations.add(new Or());
-		 operations.add(new Nor());
-		 operations.add(new Xor());
-		 operations.add(new Nand());
+		operations.add(new Nor());
+		operations.add(new Xor());
+		operations.add(new Nand());
 
 		// Grid of operations
-		Grid<Boolean> grid = new Grid<Boolean>(operations, input, output, rows, columns, enteringGates);
+		Grid<Boolean> grid = new Grid<Boolean>(operations, input, output, rows, columns, false, enteringGates, probability, recurrentProbability);
 		Boolean tab[] = new Boolean[input];
 		for(int ii = 0; ii < input; ii++)
 		{
-			tab[ii] = getRandomBoolean();
+			tab[ii] = rand.nextBoolean();
 		}
 		grid.setInputValues(tab);
 		grid.calculateValueForEveryGate();
 
 		// Set of grids
-		GridGenerator<Boolean> gridGenerator = new GridGenerator<Boolean>(grid, probability);
+		GridGenerator<Boolean> gridGenerator = new GridGenerator<Boolean>(grid, probability, recurrentProbability);
 		gridGenerator.getMainGrid().calculateValueForEveryGate();
 		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 		{
@@ -124,7 +122,7 @@ public class MainClass extends Canvas
 
 		FourPlusOneAlogrithm<Boolean> fourPlusOne = new FourPlusOneAlogrithm<Boolean>(gridGenerator, grid, fitness);
 		Grid<Boolean> finalGrid = fourPlusOne.generateProgramm();
-		finalGrid.calculateValueForEveryGate();//Needed for drawing
+		finalGrid.calculateValueForEveryGate();// Needed for drawing
 
 		// ... Elapsed time is: ...
 		long estimatedTime = System.currentTimeMillis() - startTime;
@@ -136,6 +134,15 @@ public class MainClass extends Canvas
 		finalFrame.add(finalGridVisualizer);
 		finalFrame.setVisible(true);
 		finalFrame.setSize(1600, 900);
+
+		for(int ii = 0; ii < finalGrid.getM(); ii++)
+		{
+			for(int jj = 0; jj < finalGrid.getN(); jj++)
+			{
+				System.out.print(finalGrid.getGates()[ii][jj].getEnteringGatesNumber() + "	");
+			}
+			System.out.println();
+		}
 
 	}
 }

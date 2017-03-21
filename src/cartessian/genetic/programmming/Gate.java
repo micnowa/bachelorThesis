@@ -5,12 +5,16 @@ import java.util.LinkedList;
 import cartessian.genetic.programmming.function.Functional;
 
 /**
+ * Class representing node in grid of functions. It is connected with other
+ * gates. Such links are represented by two lists(enteringGates, exitingGates).
+ * Position of grid is ii- number of row, jj- number o column. Negative value of
+ * jj means gates is an input gate. Each gate has function and value(resoult of
+ * function with values form gates entering this gate).
+ * 
  * @author Michał Nowaliński
  * 
  * @param <T>
  *            Operation
- * @param <U>
- *            Operation's argument
  */
 public class Gate<T>
 {
@@ -18,31 +22,31 @@ public class Gate<T>
 	 * Number of row
 	 */
 	protected int i;
+
 	/**
 	 * Number of column
 	 */
 	protected int j;
+
 	/**
 	 * Gate's operation
 	 */
 	protected Functional<T> function;
+
 	/**
 	 * Gate's value, retrieved after performed operation on values entering gate
 	 */
 	protected T value;
+
 	/**
 	 * List of gates, gate is pointed to
 	 */
 	protected LinkedList<Gate<T>> enteringGates = new LinkedList<Gate<T>>();
+
 	/**
 	 * List of gates, gate points to
 	 */
 	protected LinkedList<Gate<T>> exitingGates = new LinkedList<Gate<T>>();
-
-	/**
-	 * Flag representing, whether value on gate is yet counted
-	 */
-	protected Boolean counted;
 
 	/**
 	 * Default Constructor
@@ -61,12 +65,12 @@ public class Gate<T>
 	 * @param jj
 	 *            j-position
 	 */
-	public Gate(Functional<T> function, int ii, int jj)
+	public Gate(Functional<T> function, int ii, int jj, T initialValue)
 	{
 		this.function = function;
 		this.i = ii;
 		this.j = jj;
-		this.counted = false;
+		this.value = initialValue;
 	}
 
 	/**
@@ -168,38 +172,7 @@ public class Gate<T>
 		return exitingGates.size();
 	}
 
-	/**
-	 * Adds a gate to LinkedList of gates, gate is pointed to
-	 * 
-	 * @param gate
-	 *            Gate that should be added to gates, gate is pointed to
-	 */
-	void addEnteringGate(Gate<T> gate)
-	{
-		enteringGates.add(gate);
-	}
-
-	/**
-	 * @param gate
-	 *            gate to be added gate to
-	 * @param pos
-	 *            position which gate will be add at
-	 */
-	void addEnteringGateAt(int pos, Gate<T> gate)
-	{
-		enteringGates.add(pos, gate);
-	}
-
-	/**
-	 * Adds a gate to LinkedList of gates, gate points to
-	 * 
-	 * @param gate
-	 *            Gate that should be added to gates, gate points to
-	 */
-	void addExitingGate(Gate<T> gate)
-	{
-		exitingGates.add(gate);
-	}
+	
 
 	/**
 	 * Returns LinkedList of gates, gate points to
@@ -240,19 +213,36 @@ public class Gate<T>
 	}
 
 	/**
-	 * @return
+	 * Adds a gate to LinkedList of gates, gate is pointed to
+	 * 
+	 * @param gate
+	 *            Gate that should be added to gates, gate is pointed to
 	 */
-	public Boolean getCounted()
+	void addEnteringGate(Gate<T> gate)
 	{
-		return counted;
+		enteringGates.add(gate);
 	}
 
 	/**
-	 * @param counted
+	 * @param gate
+	 *            gate to be added gate to
+	 * @param pos
+	 *            position which gate will be add at
 	 */
-	public void setCounted(Boolean counted)
+	void addEnteringGateAt(int pos, Gate<T> gate)
 	{
-		this.counted = counted;
+		enteringGates.add(pos, gate);
+	}
+
+	/**
+	 * Adds a gate to LinkedList of gates, gate points to
+	 * 
+	 * @param gate
+	 *            Gate that should be added to gates, gate points to
+	 */
+	void addExitingGate(Gate<T> gate)
+	{
+		exitingGates.add(gate);
 	}
 
 }

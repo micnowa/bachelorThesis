@@ -3,6 +3,13 @@ package cartessian.genetic.programmming;
 import java.awt.*;
 import java.util.LinkedList;
 
+/**
+ * Class drawing grid on Canvas.
+ * 
+ * @author Michał Nowaliński
+ *
+ * @param <T>
+ */
 public class GridVisualizer<T> extends Canvas
 {
 	/**
@@ -171,9 +178,11 @@ public class GridVisualizer<T> extends Canvas
 	}
 
 	/**
-	 * @param g
-	 * @param ii
-	 * @param jj
+	 * Highlights gate and gates leading to it.
+	 * 
+	 * @param g	Graphics
+	 * @param ii	Gate's row
+	 * @param jj	Gate's column
 	 */
 	public void highlightGate(Graphics2D g, int ii, int jj)
 	{

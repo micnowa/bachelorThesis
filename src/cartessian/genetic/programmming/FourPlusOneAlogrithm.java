@@ -2,29 +2,63 @@ package cartessian.genetic.programmming;
 
 import cartessian.genetic.programmming.fitness.Fitness;
 
+/**
+ * Class responsible for running four plus one algorithm. Use provides Gird<T>,
+ * Fitness<T> and GridGenerator<T>. It can be done by constructor
+ * FourPlusOneAlogrithm(GridGenerator<T> gridGenerator, Grid<T> grid, Fitness<T>
+ * fitness) or be implemented by setGird(Grid<T> grid) and setFitness(Fitness<T>
+ * fitness). Main goal of this class is to generate grid realizing user's needs.
+ * In this case user has to call method Grid<T> generateProgramm(). It runs four
+ * plus one algorithm basing on fitness and grid user implemented. Return value
+ * is grid<T>, that can be later used by user for his own needs.
+ * 
+ * Four plus One algorithm is an algorithm generating final grid. In first step
+ * four new grids are created basing on main grid. Fitness of each one is
+ * counted. Grid with the biggest score becomes main grid. Another 4 are
+ * destroyed. If main grid is one with best fitness it stays as the main one.
+ * Algorithm is executed until it is found grid with fitness equal to
+ * maxFitness.
+ * 
+ * @Warning Fitness must be higher or equal to 0 and less or equal to
+ *          maxFitness.
+ * 
+ * @author Michał Nowaliński
+ * 
+ * @param <T>
+ *            Type of variables user want to use
+ */
 public class FourPlusOneAlogrithm<T>
 {
 	/**
-	 * 
+	 * GridGenerator used in algorithm to generate 4 new grids based on main
+	 * Grid
 	 */
 	private GridGenerator<T> gridGenerator;
+
 	/**
-	 * 
+	 * Grid, new Grids are based on
 	 */
 	private Grid<T> grid;
+
 	/**
-	 * 
+	 * Interface implemented by user. It is used in every step for each grid. It
+	 * returns its fitness
 	 */
 	private Fitness<T> fitness;
+
 	/**
-	 * 
+	 * Grid generated as a result of run algorithm. Its fitness is equal
+	 * maxFitness, that mean such grid realists all user's needs
 	 */
 	private Grid<T> programm;
 
 	/**
-	 * @param gridGenerator
-	 * @param grid
-	 * @param fitness
+	 * Constructor with 3 parameters class requires to properly run 4plus1
+	 * algorithm
+	 * 
+	 * @param gridGenerator	GridGenerator used in every step to generate new grids
+	 * @param grid	Grid all grids in 4plus1 are based on
+	 * @param fitness	Interface counting grid's fitness
 	 */
 	public FourPlusOneAlogrithm(GridGenerator<T> gridGenerator, Grid<T> grid, Fitness<T> fitness)
 	{
@@ -34,7 +68,9 @@ public class FourPlusOneAlogrithm<T>
 	}
 
 	/**
-	 * @return
+	 * GridGenerator getter
+	 * 
+	 * @return	GridGenerator
 	 */
 	public GridGenerator<T> getGridGenerator()
 	{
@@ -42,6 +78,8 @@ public class FourPlusOneAlogrithm<T>
 	}
 
 	/**
+	 * GridGenerator setter
+	 * 
 	 * @param gridGenerator
 	 */
 	public void setGridGenerator(GridGenerator<T> gridGenerator)
@@ -50,7 +88,9 @@ public class FourPlusOneAlogrithm<T>
 	}
 
 	/**
-	 * @return
+	 * Grid getter
+	 * 
+	 * @return Grid
 	 */
 	public Grid<T> getGrid()
 	{
@@ -58,6 +98,8 @@ public class FourPlusOneAlogrithm<T>
 	}
 
 	/**
+	 * Grid setter
+	 * 
 	 * @param grid
 	 */
 	public void setGrid(Grid<T> grid)
@@ -66,7 +108,9 @@ public class FourPlusOneAlogrithm<T>
 	}
 
 	/**
-	 * @return
+	 * Fitness getter
+	 * 
+	 * @return	Fitness
 	 */
 	public Fitness<T> getFitness()
 	{
@@ -82,7 +126,9 @@ public class FourPlusOneAlogrithm<T>
 	}
 
 	/**
-	 * @return
+	 * Program getter
+	 * 
+	 * @return	Grid evolved by method run()
 	 */
 	public Grid<T> getProgramm()
 	{
@@ -90,30 +136,24 @@ public class FourPlusOneAlogrithm<T>
 	}
 
 	/**
-	 * @param programm
+	 * Method executing four plus one algorithm
 	 */
-	public void setProgramm(Grid<T> programm)
+	private void run()
 	{
-		this.programm = programm;
-	}
 
-	/**
-	 * 
-	 */
-	public void run()
-	{
-		
 		Boolean solutionFound = false;
 		int score[] = new int[GridGenerator.getGridNumber() + 1];
 		int bestGridNumber;
 		int timesRunned = 1;
+		double probability = grid.getProbability();
+		double recurrentProbability = grid.getRecurrentProbability();
 		score[0] = fitness.getGridFitness(gridGenerator.getMainGrid());
-		
+
 		while(!solutionFound)
 		{
 			System.out.println("==================================");
 			System.out.println("Times runned:	" + timesRunned);
-			
+
 			score[0] = fitness.getGridFitness(gridGenerator.getMainGrid());
 			System.out.print(score[0] + "	");
 
@@ -125,12 +165,13 @@ public class FourPlusOneAlogrithm<T>
 				if(score[ii + 1] > score[bestGridNumber]) bestGridNumber = ii + 1;
 			}
 			System.out.println(",best score:	" + score[bestGridNumber]);
-			
+
 			if(score[bestGridNumber] == fitness.getMaxFitness(gridGenerator.getMainGrid()))
 			{
 				solutionFound = true;
 				if(bestGridNumber == 0) programm = gridGenerator.getMainGrid();
-				else programm = gridGenerator.getGrid()[bestGridNumber - 1];
+				else
+					programm = gridGenerator.getGrid()[bestGridNumber - 1];
 			}
 			else
 			{
@@ -144,19 +185,21 @@ public class FourPlusOneAlogrithm<T>
 				else
 				{
 					grid = gridGenerator.getGrid()[bestGridNumber - 1];
-					gridGenerator = new GridGenerator<T>(grid, gridGenerator.getProbability());
+					gridGenerator = new GridGenerator<T>(grid, probability, recurrentProbability);
 					System.out.println("New GG with grid number: " + bestGridNumber);
 				}
 			}
 			System.out.println("New GG created!");
 			timesRunned++;
-			
+
 			System.out.println();
 		}
 	}
-	
+
 	/**
-	 * @return
+	 * Function used by user to generate grid realizing all needs
+	 * 
+	 * @return	Final Grid
 	 */
 	public Grid<T> generateProgramm()
 	{

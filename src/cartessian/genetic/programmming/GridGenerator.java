@@ -1,6 +1,9 @@
 package cartessian.genetic.programmming;
 
 /**
+ * Class creating 4 new grids based on main Grid. It takes main grid and draws
+ * new links between gates and reassigns functions with given probability.
+ * 
  * @author Michał Nowaliński
  * @version 1.01
  * 
@@ -11,18 +14,16 @@ public class GridGenerator<T>
 	 * Number of copied grids
 	 */
 	private final static int gridNumber = 4;
+
 	/**
 	 * Grid new grid are created from
 	 */
 	private Grid<T> mainGrid;
+
 	/**
 	 * Grids copied from main grid
 	 */
 	private Grid<T>[] grid;
-	/**
-	 * Probability of changing link between two grids
-	 */
-	private double probability;
 
 	/**
 	 * @return mainGrid
@@ -57,22 +58,6 @@ public class GridGenerator<T>
 	}
 
 	/**
-	 * @return
-	 */
-	public double getProbability()
-	{
-		return probability;
-	}
-
-	/**
-	 * @param operationChangeProbability
-	 */
-	public void setProbability(double probability)
-	{
-		this.probability = probability;
-	}
-
-	/**
 	 * Default constructor
 	 */
 	@SuppressWarnings("unchecked") public GridGenerator()
@@ -91,7 +76,7 @@ public class GridGenerator<T>
 	 * @param gateChangeProb
 	 *            Probability of changing gate's operation in new grid
 	 */
-	@SuppressWarnings("unchecked") public GridGenerator(Grid<T> initialGrid, double prob)
+	@SuppressWarnings("unchecked") public GridGenerator(Grid<T> initialGrid, double probability, double recurrentProbability)
 	{
 		System.out.println("Main grid creating ...");
 		mainGrid = new Grid<T>(initialGrid);
@@ -101,8 +86,7 @@ public class GridGenerator<T>
 			System.out.println("Grid[" + ii + "] creating");
 			grid[ii] = new Grid<T>(mainGrid);
 		}
-		probability = prob;
-		
+
 		generateNewGrids();
 		System.out.println("Generations finished!");
 	}
@@ -115,8 +99,8 @@ public class GridGenerator<T>
 		System.out.println("Realinking and reassigning");
 		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 		{
-			grid[ii].reassignGatesOperation(probability);
-			grid[ii].relinkAllGates(probability);
+			grid[ii].reassignGatesOperation();
+			grid[ii].relinkAllGates();
 		}
 	}
 
