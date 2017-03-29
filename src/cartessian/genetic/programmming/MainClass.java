@@ -45,13 +45,13 @@ public class MainClass extends Canvas
 
 	public static void main(String[] args) throws InterruptedException
 	{
-		int input = 5;
-		int output = 5;
-		int rows = 5;
+		int input = 12;
+		int output = 50;
+		int rows = 50;
 		int columns = 9;
 		int enteringGates = 2;
-		double probability = 0.2;
-		double recurrentProbability = 0;
+		double probability = 0.5;
+		double recurrentProbability = 0.04;
 		Random rand = new Random();
 
 		// Available Operations

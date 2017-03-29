@@ -1,5 +1,6 @@
 package cartessian.genetic.programmming;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -73,6 +74,13 @@ public class Grid<T>
 	/**
 	 * Default constructor. Set all fields with their default values
 	 */
+
+	/**
+	 * List holding references active in calculating value on output. Useful
+	 * only, when recurrent probability is not 0
+	 */
+	private ArrayList<Gate<T>> activeGates;
+
 	public Grid()
 	{
 		this.m = 0;
@@ -130,6 +138,8 @@ public class Grid<T>
 				gates[ii][jj] = new Gate<T>(functionList.get(randomGenerator.nextInt(functionList.size())), ii, jj, initialValue);
 			}
 		}
+
+		activeGates = new ArrayList<Gate<T>>();
 		linkAllGates();
 	}
 
@@ -219,6 +229,18 @@ public class Grid<T>
 			{
 				linkGates(gates[ii][jj], output[kk]);
 			}
+		}
+
+		activeGates = new ArrayList<Gate<T>>();
+		int ii, jj;
+		for(Gate<T> x : grid.getActiveGates())
+		{
+			ii = x.getI();
+			jj = x.getJ();
+			if(jj == -1) activeGates.add(input[ii]);
+			else if(jj == n) activeGates.add(output[ii]);
+			else
+				activeGates.add(gates[ii][jj]);
 		}
 
 	}
@@ -404,6 +426,51 @@ public class Grid<T>
 	public void setOutput(Gate<T>[] output)
 	{
 		this.output = output;
+	}
+
+	public ArrayList<Gate<T>> getActiveGates()
+	{
+		return activeGates;
+	}
+
+	private void addToActiveGates(int ii, int jj)
+	{
+		Gate<T> gate;
+		int iPrim, jPrim;
+		if(jj == -1)
+		{
+			gate = input[ii];
+			if(!activeGates.contains(gate))
+			{
+				activeGates.add(gate);
+			}
+			return;
+		}
+		else
+		{
+			gate = gates[ii][jj];
+			if(!activeGates.contains(gate))
+			{
+				activeGates.add(gate);
+				for(int kk = 0; kk < enteringGatesNumber; kk++)
+				{
+					iPrim = gate.getEnteringGates().get(kk).getI();
+					jPrim = gate.getEnteringGates().get(kk).getJ();
+					addToActiveGates(iPrim, jPrim);
+				}
+			}
+			else
+				return;
+		}
+	}
+
+	public void setActiveGates(int num)
+	{
+		int ii, jj;
+		activeGates.add(output[num]);
+		ii = output[num].getEnteringGates().getFirst().getI();
+		jj = output[num].getEnteringGates().getFirst().getJ();
+		addToActiveGates(ii, jj);
 	}
 
 	/**
@@ -704,22 +771,29 @@ public class Grid<T>
 		{
 			return input[ii].getValue();
 		}
-		else if(recurrentProbability != 0 || jj == 0)
+		else if(jj == n)
 		{
-			gateList = gates[ii][jj].getEnteringGates();
-			for(Gate<T> gate : gateList)
-			{
-				valueList.add(gate.getValue());
-			}
+			output[ii].setValue(output[ii].getEnteringGates().getFirst().getValue());
+			return output[ii].getValue();
 		}
 		else
 		{
 			gateList = gates[ii][jj].getEnteringGates();
-			for(Gate<T> gate : gateList)
+			if(recurrentProbability != 0)
 			{
-				int iPrim = gate.getI();
-				int jPrim = gate.getJ();
-				valueList.add(calculateGateValue(iPrim, jPrim));
+				for(Gate<T> gate : gateList)
+				{
+					valueList.add(gate.getValue());
+				}
+			}
+			else
+			{
+				for(Gate<T> gate : gateList)
+				{
+					int iPrim = gate.getI();
+					int jPrim = gate.getJ();
+					valueList.add(calculateGateValue(iPrim, jPrim));
+				}
 			}
 		}
 		gates[ii][jj].setValue(gates[ii][jj].getFunction().calculateValue(valueList));
@@ -737,10 +811,22 @@ public class Grid<T>
 	 */
 	public T calculateOutputValue(int arg)
 	{
-		Gate<T> lastGate = output[arg].getEnteringGates().getFirst();
-		int ii = lastGate.getI();
-		int jj = lastGate.getJ();
-		return calculateGateValue(ii, jj);
+		if(recurrentProbability != 0)
+		{
+			setActiveGates(arg);
+			for(Gate<T> gate : activeGates)
+			{
+				calculateGateValue(gate.getI(), gate.getJ());
+			}
+			return output[arg].getValue();
+		}
+		else
+		{
+			Gate<T> lastGate = output[arg].getEnteringGates().getFirst();
+			int ii = lastGate.getI();
+			int jj = lastGate.getJ();
+			return calculateGateValue(ii, jj);
+		}
 	}
 
 }
