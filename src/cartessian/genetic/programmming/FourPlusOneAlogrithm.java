@@ -70,7 +70,7 @@ public class FourPlusOneAlogrithm<T>
 	/**
 	 * GridGenerator getter
 	 * 
-	 * @return	GridGenerator
+	 * @return	GridGenerator	GridGenerator
 	 */
 	public GridGenerator<T> getGridGenerator()
 	{
@@ -80,7 +80,7 @@ public class FourPlusOneAlogrithm<T>
 	/**
 	 * GridGenerator setter
 	 * 
-	 * @param gridGenerator
+	 * @param gridGenerator	gridGenerator
 	 */
 	public void setGridGenerator(GridGenerator<T> gridGenerator)
 	{
@@ -90,7 +90,7 @@ public class FourPlusOneAlogrithm<T>
 	/**
 	 * Grid getter
 	 * 
-	 * @return Grid
+	 * @return Grid	Grid
 	 */
 	public Grid<T> getGrid()
 	{
@@ -100,7 +100,7 @@ public class FourPlusOneAlogrithm<T>
 	/**
 	 * Grid setter
 	 * 
-	 * @param grid
+	 * @param grid	Grid
 	 */
 	public void setGrid(Grid<T> grid)
 	{
@@ -110,7 +110,7 @@ public class FourPlusOneAlogrithm<T>
 	/**
 	 * Fitness getter
 	 * 
-	 * @return	Fitness
+	 * @return	Fitness	fitness function
 	 */
 	public Fitness<T> getFitness()
 	{
@@ -118,7 +118,7 @@ public class FourPlusOneAlogrithm<T>
 	}
 
 	/**
-	 * @param fitness
+	 * @param fitness	fitness function
 	 */
 	public void setFitness(Fitness<T> fitness)
 	{
@@ -199,7 +199,7 @@ public class FourPlusOneAlogrithm<T>
 	/**
 	 * Function used by user to generate grid realizing all needs
 	 * 
-	 * @return	Final Grid
+	 * @return	Final Grid that has maximum fitness
 	 */
 	public Grid<T> generateProgramm()
 	{

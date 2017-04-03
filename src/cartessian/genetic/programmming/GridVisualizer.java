@@ -4,11 +4,14 @@ import java.awt.*;
 import java.util.LinkedList;
 
 /**
- * Class drawing grid on Canvas.
+ * Class drawing grid on Canvas. Size of picture is 1600px width and 900px. User
+ * is obliged to make sure input, gates, output are small enough to fit in size
+ * of picture. Otherwise gates that are beside picture will be trimmed
  * 
  * @author Michał Nowaliński
- *
+ * 
  * @param <T>
+ *            Type of value gate has in
  */
 public class GridVisualizer<T> extends Canvas
 {
@@ -16,24 +19,20 @@ public class GridVisualizer<T> extends Canvas
 	 * Serial Number
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * Grid that is printed on canvas, with highlighted active gates leading to active output
+	 * Grid that is printed on canvas, with highlighted active gates leading to
+	 * active output
 	 */
 	private Grid<T> grid;
-	
-	/**
-	 * Number of active output, it means output,which value is counted on
-	 */
-	private int activeOutput;
-	
+
 	/**
 	 * Size in pixels of side of square representing gate
 	 */
 	private int a;
-	
+
 	/**
-	 * Distance between squares representing output
+	 * Distance between squares representing gates given in pixels
 	 */
 	private int dist;
 
@@ -41,6 +40,7 @@ public class GridVisualizer<T> extends Canvas
 	 * Constructor of GridVisualizer
 	 * 
 	 * @param grid
+	 *            grid put on the picture
 	 */
 	public GridVisualizer(Grid<T> grid)
 	{
@@ -48,23 +48,7 @@ public class GridVisualizer<T> extends Canvas
 	}
 
 	/**
-	 * @return
-	 */
-	public int getActiveOutput()
-	{
-		return activeOutput;
-	}
-
-	/**
-	 * @param activeOutput
-	 */
-	public void setActiveOutput(int activeOutput)
-	{
-		this.activeOutput = activeOutput;
-	}
-
-	/**
-	 * @return
+	 * @return	size of square representing gate
 	 */
 	public int getA()
 	{
@@ -73,6 +57,7 @@ public class GridVisualizer<T> extends Canvas
 
 	/**
 	 * @param a
+	 *            size of square representing gate
 	 */
 	public void setA(int a)
 	{
@@ -80,7 +65,7 @@ public class GridVisualizer<T> extends Canvas
 	}
 
 	/**
-	 * @return
+	 * @return distance between output rectangles
 	 */
 	public int getDist()
 	{
@@ -89,13 +74,16 @@ public class GridVisualizer<T> extends Canvas
 
 	/**
 	 * @param d
+	 *            distance between output rectangles
 	 */
 	public void setDist(int d)
 	{
 		this.dist = d;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Canvas#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g)
@@ -158,31 +146,44 @@ public class GridVisualizer<T> extends Canvas
 			}
 		}
 
-		// Highlighting active output
+		// Highlighting output
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(3));
 		g2.setColor(Color.RED);
-		int gateI = grid.getOutput()[activeOutput].getEnteringGates().getFirst().getI();
-		int gateJ = grid.getOutput()[activeOutput].getEnteringGates().getFirst().getJ();
-		if(grid.getOutput()[activeOutput].getEnteringGates().getFirst().getJ() == -1)
+		int gateI, gateJ;
+		for(int ii = 0; ii < grid.getOutputNumber(); ii++)
 		{
-			g.drawLine(a, gateI * dist + 80 + a / 2, 1500, activeOutput * dist + 50 + a + a / 2);
+			gateI = grid.getOutput()[ii].getEnteringGates().getFirst().getI();
+			gateJ = grid.getOutput()[ii].getEnteringGates().getFirst().getJ();
+			if(grid.getOutput()[ii].getEnteringGates().getFirst().getJ() == -1)
+			{
+				g.drawLine(a, gateI * dist + 80 + a / 2, 1500, ii * dist + 50 + a + a / 2);
+			}
+			else
+			{
+				g.drawLine((gateJ + 1) * dist + a, (gateI + 1) * dist + a / 2, 1500, ii * dist + 50 + a + a / 2);
+			}
 		}
-		else
+
+		int ii, jj;
+		for(Gate<T> gate : grid.getActiveGates())
 		{
-			g.drawLine((gateJ + 1) * dist + a, (gateI + 1) * dist + a / 2, 1500, activeOutput * dist + 50 + a + a / 2);
+			ii = gate.getI();
+			jj = gate.getJ();
+			if(jj != grid.getN()) highlightGate(g2, ii, jj);
 		}
-		int ii = grid.getOutput()[activeOutput].getEnteringGates().getFirst().getI();
-		int jj = grid.getOutput()[activeOutput].getEnteringGates().getFirst().getJ();
-		highlightGate(g2, ii, jj);
 	}
 
 	/**
-	 * Highlights gate and gates leading to it.
+	 * Highlights gate with blue color, and gates description with dark blue and
+	 * link entering this gate with black
 	 * 
-	 * @param g	Graphics
-	 * @param ii	Gate's row
-	 * @param jj	Gate's column
+	 * @param g
+	 *            Graphics
+	 * @param ii
+	 *            Gate's row
+	 * @param jj
+	 *            Gate's column
 	 */
 	public void highlightGate(Graphics2D g, int ii, int jj)
 	{
@@ -205,7 +206,6 @@ public class GridVisualizer<T> extends Canvas
 				g.setColor(Color.BLACK);
 				g.drawLine((jj + 1) * dist, (ii + 1) * dist + a / 2, (gateList.get(kk).getJ() + 1) * dist + a, (gateList.get(kk).getI() + 1) * dist + a / 2);
 			}
-			highlightGate(g, gateList.get(kk).getI(), gateList.get(kk).getJ());
 		}
 	}
 }

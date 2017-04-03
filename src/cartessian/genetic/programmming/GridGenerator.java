@@ -34,7 +34,7 @@ public class GridGenerator<T>
 	}
 
 	/**
-	 * @param mainGrid
+	 * @param mainGrid	mainGrid
 	 */
 	public void setMainGrid(Grid<T> mainGrid)
 	{
@@ -42,7 +42,7 @@ public class GridGenerator<T>
 	}
 
 	/**
-	 * @return
+	 * @return	grids table
 	 */
 	public Grid<T>[] getGrid()
 	{
@@ -50,7 +50,7 @@ public class GridGenerator<T>
 	}
 
 	/**
-	 * @param grid
+	 * @param grid	grid
 	 */
 	public void setGrid(Grid<T>[] grid)
 	{

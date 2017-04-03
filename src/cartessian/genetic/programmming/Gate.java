@@ -7,8 +7,8 @@ import cartessian.genetic.programmming.function.Functional;
 /**
  * Class representing node in grid of functions. It is connected with other
  * gates. Such links are represented by two lists(enteringGates, exitingGates).
- * Position of grid is ii- number of row, jj- number o column. Negative value of
- * jj means gates is an input gate. Each gate has function and value(resoult of
+ * Position of grid is ii- number of row, j- number o column. Negative value of
+ * j means gates is an input gate. Each gate has function and value(result of
  * function with values form gates entering this gate).
  * 
  * @author Michał Nowaliński
@@ -29,7 +29,8 @@ public class Gate<T>
 	protected int j;
 
 	/**
-	 * Gate's operation
+	 * Operation gate uses to calculate its value with given values of entering
+	 * gates
 	 */
 	protected Functional<T> function;
 
@@ -49,7 +50,7 @@ public class Gate<T>
 	protected LinkedList<Gate<T>> exitingGates = new LinkedList<Gate<T>>();
 
 	/**
-	 * Default Constructor
+	 * Default Constructor, it does nothing
 	 */
 	public Gate()
 	{
@@ -61,9 +62,9 @@ public class Gate<T>
 	 * @param operation
 	 *            operation in the gate
 	 * @param ii
-	 *            i-position
+	 *            row
 	 * @param jj
-	 *            j-position
+	 *            column
 	 */
 	public Gate(Functional<T> function, int ii, int jj, T initialValue)
 	{
@@ -77,6 +78,7 @@ public class Gate<T>
 	 * Sets the operation in gate
 	 * 
 	 * @param operation
+	 *            operation gate uses
 	 */
 	public void setFunction(Functional<T> function)
 	{
@@ -132,9 +134,9 @@ public class Gate<T>
 	{
 		return j;
 	}
-
+	
 	/**
-	 * Returns size of LinkedList of gates, gate is pointed to
+	 * @return	size of LinkedList of gates, gate is pointed to
 	 */
 	public int getEnteringGatesNumber()
 	{
@@ -171,8 +173,6 @@ public class Gate<T>
 	{
 		return exitingGates.size();
 	}
-
-	
 
 	/**
 	 * Returns LinkedList of gates, gate points to

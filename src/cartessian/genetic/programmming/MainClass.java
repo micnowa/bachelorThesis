@@ -45,13 +45,12 @@ public class MainClass extends Canvas
 
 	public static void main(String[] args) throws InterruptedException
 	{
-		int input = 12;
-		int output = 50;
-		int rows = 50;
-		int columns = 9;
-		int enteringGates = 2;
-		double probability = 0.5;
-		double recurrentProbability = 0.04;
+		int input = 6;
+		int output = 5;
+		int rows = 5;
+		int columns = 20;
+		double probability = 0.8;
+		double recurrentProbability = 0;
 		Random rand = new Random();
 
 		// Available Operations
@@ -63,7 +62,7 @@ public class MainClass extends Canvas
 		operations.add(new Nand());
 
 		// Grid of operations
-		Grid<Boolean> grid = new Grid<Boolean>(operations, input, output, rows, columns, false, enteringGates, probability, recurrentProbability);
+		Grid<Boolean> grid = new Grid<Boolean>(operations, input, output, rows, columns, false, probability, recurrentProbability);
 		Boolean tab[] = new Boolean[input];
 		for(int ii = 0; ii < input; ii++)
 		{
@@ -87,7 +86,6 @@ public class MainClass extends Canvas
 		for(int ii = 0; ii < 5; ii++)
 		{
 			if(ii != 0) gridVisualizer[ii] = new GridVisualizer<Boolean>(gridGenerator.getGrid()[ii - 1]);
-			gridVisualizer[ii].setActiveOutput(0);
 			frame[ii] = new JFrame();
 			frame[ii].add(gridVisualizer[ii]);
 
@@ -130,7 +128,6 @@ public class MainClass extends Canvas
 
 		GridVisualizer<Boolean> finalGridVisualizer = new GridVisualizer<Boolean>(finalGrid);
 		JFrame finalFrame = new JFrame();
-		finalGridVisualizer.setActiveOutput(0);
 		finalFrame.add(finalGridVisualizer);
 		finalFrame.setVisible(true);
 		finalFrame.setSize(1600, 900);

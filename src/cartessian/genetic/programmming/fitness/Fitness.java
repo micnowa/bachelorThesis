@@ -26,8 +26,8 @@ public interface Fitness<T>
 	/**
 	 * Returns max fitness of grid realizing programm's conditions
 	 * 
-	 * @param grid
-	 * @return
+	 * @param grid	gird whoose fitness will be determined
+	 * @return	max fitness gird can have
 	 */
 	int getMaxFitness(Grid<T> grid);
 }
