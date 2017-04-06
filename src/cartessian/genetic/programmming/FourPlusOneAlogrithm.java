@@ -143,26 +143,29 @@ public class FourPlusOneAlogrithm<T>
 
 		Boolean solutionFound = false;
 		int score[] = new int[GridGenerator.getGridNumber() + 1];
-		int bestGridNumber;
+		int bestGridNumber = 0;
 		int timesRunned = 1;
-		double probability = grid.getProbability();
-		double recurrentProbability = grid.getRecurrentProbability();
 		score[0] = fitness.getGridFitness(gridGenerator.getMainGrid());
 
 		while(!solutionFound)
 		{
+			score[0] = score[bestGridNumber];
+			bestGridNumber = 0;
 			System.out.println("==================================");
 			System.out.println("Times runned:	" + timesRunned);
-
-			score[0] = fitness.getGridFitness(gridGenerator.getMainGrid());
 			System.out.print(score[0] + "	");
-
-			bestGridNumber = 0;
 			for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 			{
 				score[ii + 1] = fitness.getGridFitness(gridGenerator.getGrid()[ii]);
 				System.out.print(score[ii + 1] + "	");
-				if(score[ii + 1] > score[bestGridNumber]) bestGridNumber = ii + 1;
+			}
+			
+			for(int ii = 1; ii < GridGenerator.getGridNumber(); ii++)
+			{
+				if(score[ii] < score[bestGridNumber])
+				{
+					bestGridNumber = ii;
+				}
 			}
 			System.out.println(",best score:	" + score[bestGridNumber]);
 
@@ -185,7 +188,7 @@ public class FourPlusOneAlogrithm<T>
 				else
 				{
 					grid = gridGenerator.getGrid()[bestGridNumber - 1];
-					gridGenerator = new GridGenerator<T>(grid, probability, recurrentProbability);
+					gridGenerator = new GridGenerator<T>(grid);
 					System.out.println("New GG with grid number: " + bestGridNumber);
 				}
 			}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import cartessian.genetic.programmming.function.Functional;
+import cartessian.genetic.programmming.fitness.Functional;
 
 /**
  * Grid is a class responsible for execution user requirements. It has 3 main
@@ -85,6 +85,11 @@ public class Grid<T>
 	 * outputs
 	 */
 	private ArrayList<Gate<T>> activeGates;
+	
+	/**
+	 * Value gate is deafoutly initiated
+	 */
+	private T initialValue;
 
 	/**
 	 * Default constructor
@@ -119,6 +124,7 @@ public class Grid<T>
 		this.randomGenerator = new Random();
 		this.recurrentProbability = recurrentProbability;
 		this.probability = probability;
+		this.initialValue = initialValue;
 
 		this.inputNumber = inputNum;
 		this.input = new Gate[inputNumber];
@@ -180,8 +186,8 @@ public class Grid<T>
 		outputNumber = grid.outputNumber;
 		probability = grid.getProbability();
 		recurrentProbability = grid.getRecurrentProbability();
+		initialValue = grid.getInitialValue();
 
-		T initialValue = grid.getGates()[0][0].getValue();
 		input = new Gate[inputNumber];
 		for(int ii = 0; ii < inputNumber; ii++)
 		{
@@ -545,6 +551,16 @@ public class Grid<T>
 			setOutputActiveGates(ii);
 	}
 
+	public T getInitialValue()
+	{
+		return initialValue;
+	}
+
+	public void setInitialValue(T initialValue)
+	{
+		this.initialValue = initialValue;
+	}
+
 	/**
 	 * Prints gird on the stand output
 	 */
@@ -905,6 +921,21 @@ public class Grid<T>
 			int jj = lastGate.getJ();
 			return calculateGateValue(ii, jj);
 		}
+	}
+	
+	
+	public void clearGatesValues()
+	{
+		for(int ii = 0; ii < m; ii++)
+			for(int jj = 1; jj < n; jj++)
+				gates[ii][jj].setValue(initialValue);
+
+		for(int ii = 0; ii < inputNumber; ii++)
+			input[ii].setValue(initialValue);
+
+		for(int ii = 0; ii < outputNumber; ii++)
+			output[ii].setValue(initialValue);
+
 	}
 
 }

@@ -2,7 +2,7 @@ package cartessian.genetic.programmming;
 
 import java.util.LinkedList;
 
-import cartessian.genetic.programmming.function.Functional;
+import cartessian.genetic.programmming.fitness.Functional;
 
 /**
  * Class representing node in grid of functions. It is connected with other
@@ -42,18 +42,19 @@ public class Gate<T>
 	/**
 	 * List of gates, gate is pointed to
 	 */
-	protected LinkedList<Gate<T>> enteringGates = new LinkedList<Gate<T>>();
-
+	protected LinkedList<Gate<T>> enteringGates;
 	/**
 	 * List of gates, gate points to
 	 */
-	protected LinkedList<Gate<T>> exitingGates = new LinkedList<Gate<T>>();
+	protected LinkedList<Gate<T>> exitingGates;
 
 	/**
 	 * Default Constructor, it does nothing
 	 */
 	public Gate()
 	{
+		enteringGates = new LinkedList<Gate<T>>();
+		exitingGates = new LinkedList<Gate<T>>();
 	}
 
 	/**
@@ -72,6 +73,8 @@ public class Gate<T>
 		this.i = ii;
 		this.j = jj;
 		this.value = initialValue;
+		enteringGates = new LinkedList<Gate<T>>();
+		exitingGates = new LinkedList<Gate<T>>();
 	}
 
 	/**

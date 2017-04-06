@@ -1,4 +1,4 @@
-package cartessian.genetic.programmming.function;
+package cartessian.genetic.programmming.fitness;
 
 import java.util.LinkedList;
 

@@ -2,6 +2,8 @@ package cartessian.genetic.programmming.function;
 
 import java.util.LinkedList;
 
+import cartessian.genetic.programmming.fitness.Functional;
+
 /**
 * Class implementing interface Functional<Boolean> with logic XOR
 * 

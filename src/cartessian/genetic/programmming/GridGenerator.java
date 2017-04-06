@@ -76,7 +76,7 @@ public class GridGenerator<T>
 	 * @param gateChangeProb
 	 *            Probability of changing gate's operation in new grid
 	 */
-	@SuppressWarnings("unchecked") public GridGenerator(Grid<T> initialGrid, double probability, double recurrentProbability)
+	@SuppressWarnings("unchecked") public GridGenerator(Grid<T> initialGrid)
 	{
 		System.out.println("Main grid creating ...");
 		mainGrid = new Grid<T>(initialGrid);
