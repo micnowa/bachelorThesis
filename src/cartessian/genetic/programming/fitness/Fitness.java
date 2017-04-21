@@ -1,6 +1,6 @@
-package cartessian.genetic.programmming.fitness;
+package cartessian.genetic.programming.fitness;
 
-import cartessian.genetic.programmming.Grid;
+import cartessian.genetic.programming.Grid;
 
 /**
  * Interface used in FourPlusOne algorithm. It is used in counting grid's
@@ -26,7 +26,7 @@ public interface Fitness<T>
 	/**
 	 * Returns max fitness of grid realizing programm's conditions
 	 * 
-	 * @param grid	gird whoose fitness will be determined
+	 * @param grid	gird whose fitness will be determined
 	 * @return	max fitness gird can have
 	 */
 	int getMaxFitness(Grid<T> grid);

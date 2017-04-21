@@ -1,8 +1,8 @@
-package cartessian.genetic.programmming;
+package cartessian.genetic.programming;
 
 import java.util.LinkedList;
 
-import cartessian.genetic.programmming.fitness.Functional;
+import cartessian.genetic.programming.fitness.Functional;
 
 /**
  * Class representing node in grid of functions. It is connected with other
@@ -137,9 +137,9 @@ public class Gate<T>
 	{
 		return j;
 	}
-	
+
 	/**
-	 * @return	size of LinkedList of gates, gate is pointed to
+	 * @return size of LinkedList of gates, gate is pointed to
 	 */
 	public int getEnteringGatesNumber()
 	{

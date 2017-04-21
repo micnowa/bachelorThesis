@@ -1,7 +1,7 @@
-package cartessian.genetic.programmming.function;
+package cartessian.genetic.programming.function;
 
-import cartessian.genetic.programmming.Grid;
-import cartessian.genetic.programmming.fitness.Fitness;
+import cartessian.genetic.programming.Grid;
+import cartessian.genetic.programming.fitness.Fitness;
 
 /**
  * Class implementing interface Fitness with type Boolean. It checks, whether

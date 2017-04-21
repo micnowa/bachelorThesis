@@ -1,4 +1,4 @@
-package cartessian.genetic.programmming;
+package cartessian.genetic.programming;
 
 import java.awt.*;
 import java.util.LinkedList;

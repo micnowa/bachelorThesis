@@ -2,7 +2,7 @@ package cartessian.genetic.programming.sinus;
 
 import java.util.LinkedList;
 
-import cartessian.genetic.programmming.fitness.Functional;
+import cartessian.genetic.programming.fitness.Functional;
 
 public class Cube implements Functional<Double>
 {

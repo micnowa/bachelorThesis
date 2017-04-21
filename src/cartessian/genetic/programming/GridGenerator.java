@@ -1,4 +1,4 @@
-package cartessian.genetic.programmming;
+package cartessian.genetic.programming;
 
 /**
  * Class creating 4 new grids based on main Grid. It takes main grid and draws
@@ -16,16 +16,18 @@ public class GridGenerator<T>
 	private final static int gridNumber = 4;
 
 	/**
-	 * Grid new grid are created from
+	 * Grid new grids are created from
 	 */
 	private Grid<T> mainGrid;
 
 	/**
-	 * Grids copied from main grid
+	 * Table of grids based on main grid
 	 */
 	private Grid<T>[] grid;
 
 	/**
+	 * Returns main grid
+	 * 
 	 * @return mainGrid
 	 */
 	public Grid<T> getMainGrid()
@@ -34,7 +36,10 @@ public class GridGenerator<T>
 	}
 
 	/**
-	 * @param mainGrid	mainGrid
+	 * Sets main grid
+	 * 
+	 * @param mainGrid
+	 *            main grid
 	 */
 	public void setMainGrid(Grid<T> mainGrid)
 	{
@@ -42,7 +47,9 @@ public class GridGenerator<T>
 	}
 
 	/**
-	 * @return	grids table
+	 * Return table of grid based on main grid
+	 * 
+	 * @return grids table
 	 */
 	public Grid<T>[] getGrid()
 	{
@@ -50,7 +57,10 @@ public class GridGenerator<T>
 	}
 
 	/**
-	 * @param grid	grid
+	 * Sets table of grids based on main grid
+	 * 
+	 * @param grid
+	 *            grid
 	 */
 	public void setGrid(Grid<T>[] grid)
 	{
@@ -70,25 +80,21 @@ public class GridGenerator<T>
 	 * Constructor with parameters
 	 * 
 	 * @param initialGrid
-	 *            Main grid, new grids are based on
-	 * @param linkChangeProb
-	 *            Probability of changing link in new grid
-	 * @param gateChangeProb
-	 *            Probability of changing gate's operation in new grid
+	 *            grid, new grids are based on
 	 */
 	@SuppressWarnings("unchecked") public GridGenerator(Grid<T> initialGrid)
 	{
-		System.out.println("Main grid creating ...");
+//		System.out.println("Main grid creating ...");
 		mainGrid = new Grid<T>(initialGrid);
 		grid = new Grid[GridGenerator.getGridNumber()];
 		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 		{
-			System.out.println("Grid[" + ii + "] creating");
+//			System.out.println("Grid[" + ii + "] creating");
 			grid[ii] = new Grid<T>(mainGrid);
 		}
 
 		generateNewGrids();
-		System.out.println("Generations finished!");
+//		System.out.println("Generations finished!");
 	}
 
 	/**
@@ -96,16 +102,16 @@ public class GridGenerator<T>
 	 */
 	public void generateNewGrids()
 	{
-		System.out.println("Realinking and reassigning");
+//		System.out.println("Realinking and reassigning");
 		for(int ii = 0; ii < GridGenerator.getGridNumber(); ii++)
 		{
-			grid[ii].reassignGatesOperation();
+			grid[ii].reassignGatesFunction();
 			grid[ii].relinkAllGates();
 		}
 	}
 
 	/**
-	 * @return Number of new grids
+	 * @return Size of table of grids based on main grid
 	 */
 	public static int getGridNumber()
 	{

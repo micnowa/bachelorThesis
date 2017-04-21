@@ -1,16 +1,16 @@
-package cartessian.genetic.programmming.function;
+package cartessian.genetic.programming.function;
 
 import java.util.LinkedList;
 
-import cartessian.genetic.programmming.fitness.Functional;
+import cartessian.genetic.programming.fitness.Functional;
 
 /**
-* Class implementing interface Functional<Boolean> with logic NOR
-* 
-* @author Michał Nowaliński
-*
-*/
-public class Nor implements Functional<Boolean>
+ * Class implementing interface Functional<Boolean> with logic NAND
+ * 
+ * @author Michał Nowaliński
+ *
+ */
+public class Nand implements Functional<Boolean>
 {
 
 	/* (non-Javadoc)
@@ -18,7 +18,7 @@ public class Nor implements Functional<Boolean>
 	 */
 	@Override public Boolean calculateValue(LinkedList<Boolean> list)
 	{
-		return !((list.get(0)) || list.get(1));//Good a NOR b
+		return (list.get(0)) ? !(list.get(1)) : true;
 	}
 
 	/* (non-Javadoc)
@@ -27,7 +27,7 @@ public class Nor implements Functional<Boolean>
 	@Override public String toString()
 	{
 		// TODO Auto-generated method stub
-		return "NOR";
+		return "NAND";
 	}
 	
 	/* (non-Javadoc)
@@ -38,5 +38,4 @@ public class Nor implements Functional<Boolean>
 		// TODO Auto-generated method stub
 		return 2;
 	}
-
 }

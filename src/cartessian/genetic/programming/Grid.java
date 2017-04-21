@@ -1,10 +1,12 @@
-package cartessian.genetic.programmming;
+package cartessian.genetic.programming;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Random;
 
-import cartessian.genetic.programmming.fitness.Functional;
+import cartessian.genetic.programming.fitness.Functional;
 
 /**
  * Grid is a class responsible for execution user requirements. It has 3 main
@@ -36,27 +38,27 @@ public class Grid<T>
 	private int enteringGatesNumber;
 
 	/**
-	 * Two dimensional table of gate
+	 * Two dimensional table of gates
 	 */
 	private Gate<T> gates[][];
 
 	/**
-	 * Number of gates in the input
+	 * Number of inputs
 	 */
 	private int inputNumber;
 
 	/**
-	 * Table of input gates
+	 * Table of inputs
 	 */
 	private Gate<T> input[];
 
 	/**
-	 * Number of gates in the output
+	 * Number of outputs
 	 */
 	private int outputNumber;
 
 	/**
-	 * Table of output gates
+	 * Table of outputs
 	 */
 	private Gate<T> output[];
 
@@ -66,28 +68,27 @@ public class Grid<T>
 	private Random randomGenerator;
 
 	/**
-	 * List of functions, that single gates can hold
+	 * List of available functions
 	 */
 	private LinkedList<Functional<T>> functionList;
 
 	/**
-	 * Probability link is forward, while linking gates
+	 * Probability of occurrence of forward link
 	 */
 	private double recurrentProbability;
 
 	/**
-	 * Probability link will be switched
+	 * Relinking probability
 	 */
 	private double probability;
 
 	/**
-	 * List holding references of gates active in calculating value on all
-	 * outputs
+	 * Array list of gates active in calculating outputs value
 	 */
 	private ArrayList<Gate<T>> activeGates;
-	
+
 	/**
-	 * Value gate is deafoutly initiated
+	 * Gate's default value
 	 */
 	private T initialValue;
 
@@ -100,7 +101,7 @@ public class Grid<T>
 
 	/**
 	 * @param functions
-	 *            List of functions that can be held in gate
+	 *            List of available functions
 	 * @param inputNum
 	 *            Number of inputs
 	 * @param outputNum
@@ -268,6 +269,8 @@ public class Grid<T>
 	}
 
 	/**
+	 * Returns number of rows
+	 * 
 	 * @return Number number of rows of the two dimensional table of gates
 	 */
 	public int getM()
@@ -287,6 +290,8 @@ public class Grid<T>
 	}
 
 	/**
+	 * Returns number of columns
+	 * 
 	 * @return Number number of columns of the two dimensional table of gates
 	 */
 	public int getN()
@@ -295,6 +300,8 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets number of columns
+	 * 
 	 * @param n
 	 *            number of columns
 	 */
@@ -304,7 +311,9 @@ public class Grid<T>
 	}
 
 	/**
-	 * @return recurrentProbability recurrentProbability
+	 * Returns recurrent probability
+	 * 
+	 * @return recurrentProbability
 	 */
 	public double getRecurrentProbability()
 	{
@@ -312,6 +321,8 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets probability of link shall be forward
+	 * 
 	 * @param recurrentProbability
 	 *            recurrentProbability
 	 */
@@ -321,6 +332,8 @@ public class Grid<T>
 	}
 
 	/**
+	 * Returns probability of switching link
+	 * 
 	 * @return probability probability
 	 */
 	public double getProbability()
@@ -329,6 +342,8 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets probability of switching link
+	 * 
 	 * @param probability
 	 *            probability
 	 */
@@ -338,6 +353,8 @@ public class Grid<T>
 	}
 
 	/**
+	 * Returns two dimensional table of gates
+	 * 
 	 * @return two dimensional table of gates
 	 */
 	public Gate<T>[][] getGates()
@@ -346,21 +363,21 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets value of every gate excluding inputs and outputs
+	 * 
 	 * @param value
 	 *            Value every gate shall hold
 	 */
 	public void setGatesValue(T value)
 	{
 		for(int ii = 0; ii < m; ii++)
-		{
 			for(int jj = 0; jj < n; jj++)
-			{
 				gates[ii][jj].setValue(value);
-			}
-		}
 	}
 
 	/**
+	 * Returns number of gates entering single gate
+	 * 
 	 * @return Number of gates entering single gate
 	 */
 	public int getEnteringGatesNumber()
@@ -369,6 +386,8 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets entering gates number
+	 * 
 	 * @param enteringGatesNumber
 	 *            Number of gates entering single gate
 	 */
@@ -378,7 +397,9 @@ public class Grid<T>
 	}
 
 	/**
-	 * @return functionList functionList
+	 * Returns linked list of available functions gate can hold
+	 * 
+	 * @return list of available functions
 	 */
 	public LinkedList<Functional<T>> getFunctionList()
 	{
@@ -386,8 +407,10 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets linked list of available functions for single gate
+	 * 
 	 * @param functionList
-	 *            functionList
+	 *            list of available functions
 	 */
 	public void setFunctionList(LinkedList<Functional<T>> functionList)
 	{
@@ -395,7 +418,9 @@ public class Grid<T>
 	}
 
 	/**
-	 * @return inputNumber inputNumber
+	 * Returns number of inputs
+	 * 
+	 * @return number of inputs
 	 */
 	public int getInputNumber()
 	{
@@ -403,8 +428,10 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets number of inputs
+	 * 
 	 * @param inputNumber
-	 *            inputNumber
+	 *            number of inputs
 	 */
 	public void setInputNumber(int inputNumber)
 	{
@@ -412,7 +439,9 @@ public class Grid<T>
 	}
 
 	/**
-	 * @return outputNumber outputNumber
+	 * Returns number of outputs
+	 * 
+	 * @return number of outputs
 	 */
 	public int getOutputNumber()
 	{
@@ -420,8 +449,10 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets number of outputs
+	 * 
 	 * @param outputNumber
-	 *            outputNumber
+	 *            number of outputs
 	 */
 	public void setOutputNumber(int outputNumber)
 	{
@@ -429,7 +460,9 @@ public class Grid<T>
 	}
 
 	/**
-	 * @return Table of gate that are input
+	 * Returns table of input gates
+	 * 
+	 * @return Table of input gates
 	 */
 	public Gate<T>[] getInput()
 	{
@@ -437,8 +470,10 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets table of input gates
+	 * 
 	 * @param input
-	 *            input
+	 *            table of input gates
 	 */
 	public void setInput(Gate<T>[] input)
 	{
@@ -446,7 +481,9 @@ public class Grid<T>
 	}
 
 	/**
-	 * @return output
+	 * Returns table of output gates
+	 * 
+	 * @return table of output gates
 	 */
 	public Gate<T>[] getOutput()
 	{
@@ -454,8 +491,10 @@ public class Grid<T>
 	}
 
 	/**
+	 * Sets table of output gates
+	 * 
 	 * @param output
-	 *            output
+	 *            table of output gates
 	 */
 	public void setOutput(Gate<T>[] output)
 	{
@@ -465,7 +504,7 @@ public class Grid<T>
 	/**
 	 * Returns active gates list
 	 * 
-	 * @return active gate list
+	 * @return active gates list
 	 */
 	public ArrayList<Gate<T>> getActiveGates()
 	{
@@ -473,18 +512,36 @@ public class Grid<T>
 	}
 
 	/**
+	 * Returns gate initial value
+	 * 
+	 * @return gate initial value
+	 */
+	public T getInitialValue()
+	{
+		return initialValue;
+	}
+
+	/**
+	 * Sets gate initial value
+	 * 
+	 * @param initialValue
+	 *            gate initial value
+	 */
+	public void setInitialValue(T initialValue)
+	{
+		this.initialValue = initialValue;
+	}
+
+	/**
 	 * Adds to active gates list every gate that is needed to count value on
 	 * output
 	 * 
-	 * @param ii
-	 *            gates rows
-	 * @param jj
-	 *            gates column
+	 * @param gate
+	 *            gate function starts adding to active gates list from
 	 */
-	private void addToActiveGates(int ii, int jj)
+	private void addToActiveGates(Gate<T> gate)
 	{
-		Gate<T> gate;
-		int iPrim, jPrim;
+		int ii = gate.getI(), jj = gate.getJ();
 		if(jj == -1)
 		{
 			gate = input[ii];
@@ -496,15 +553,12 @@ public class Grid<T>
 		}
 		else
 		{
-			gate = gates[ii][jj];
 			if(!activeGates.contains(gate))
 			{
 				activeGates.add(gate);
 				for(int kk = 0; kk < enteringGatesNumber; kk++)
 				{
-					iPrim = gate.getEnteringGates().get(kk).getI();
-					jPrim = gate.getEnteringGates().get(kk).getJ();
-					addToActiveGates(iPrim, jPrim);
+					addToActiveGates(gate.getEnteringGates().get(kk));
 				}
 			}
 			else
@@ -522,22 +576,8 @@ public class Grid<T>
 	 */
 	private void setOutputActiveGates(int num)
 	{
-		int ii, jj;
 		activeGates.add(output[num]);
-		ii = output[num].getEnteringGates().getFirst().getI();
-		jj = output[num].getEnteringGates().getFirst().getJ();
-		addToActiveGates(ii, jj);
-
-		Gate<T> gate0, gate1;
-		for(int kk = 0; kk < activeGates.size() / 2; kk++)
-		{
-			gate0 = activeGates.get(kk);
-			gate1 = activeGates.get(activeGates.size() - 1 - kk);
-			activeGates.remove(kk);
-			activeGates.remove(activeGates.size() - 1 - kk);
-			activeGates.add(activeGates.size() - kk, gate0);
-			activeGates.add(kk, gate1);
-		}
+		addToActiveGates(output[num].getEnteringGates().getFirst());
 	}
 
 	/**
@@ -549,16 +589,14 @@ public class Grid<T>
 		activeGates.clear();
 		for(int ii = 0; ii < output.length; ii++)
 			setOutputActiveGates(ii);
-	}
-
-	public T getInitialValue()
-	{
-		return initialValue;
-	}
-
-	public void setInitialValue(T initialValue)
-	{
-		this.initialValue = initialValue;
+		Collections.sort(activeGates, new Comparator<Gate<T>>()
+		{
+			@Override public int compare(Gate<T> g1, Gate<T> g2)
+			{
+				if(g1.getJ() == g2.getJ()) return 0;
+				return g1.getJ() > g2.getJ() ? 1 : -1;
+			}
+		});
 	}
 
 	/**
@@ -580,7 +618,7 @@ public class Grid<T>
 		{
 			for(int jj = 0; jj < n; jj++)
 			{
-				for(int kk = 0; kk < gates[ii][jj].enteringGates.size(); kk++)
+				for(int kk = 0; kk < enteringGatesNumber; kk++)
 				{
 					int i = gates[ii][jj].enteringGates.get(kk).getI();
 					int j = gates[ii][jj].enteringGates.get(kk).getJ();
@@ -708,8 +746,6 @@ public class Grid<T>
 	 * 
 	 * @param gate
 	 *            gate, whose links shall be switched
-	 * @param linkProbability
-	 *            Probability of switching link
 	 */
 	private void relinkGate(Gate<T> gate)
 	{
@@ -746,13 +782,11 @@ public class Grid<T>
 	}
 
 	/**
-	 * Draws with given probability, whether gate's operation shall be switched
+	 * Draws with given probability, whether gate's function shall be switched
 	 * If so draws new one form uniform distribution between 0 and
 	 * gate.operationNumber. Function repeats it for every gate in grid
-	 * 
-	 * @param logicGateProbability	logicGateProbability
 	 */
-	protected void reassignGatesOperation()
+	protected void reassignGatesFunction()
 	{
 		for(int jj = 0; jj < n; jj++)
 		{
@@ -768,9 +802,6 @@ public class Grid<T>
 
 	/**
 	 * Switches with given probability every link
-	 * 
-	 * @param linkProbability
-	 *            probability of switching link
 	 */
 	protected void relinkAllGates()
 	{
@@ -805,8 +836,10 @@ public class Grid<T>
 	}
 
 	/**
-	 * Sets values on input
+	 * Sets input values with value given in generic table with given order
 	 * 
+	 * @warning If table of value and input have different length function is
+	 *          terminated
 	 * @param val
 	 *            Table of values, input shall be set with
 	 */
@@ -849,15 +882,14 @@ public class Grid<T>
 	/**
 	 * Recursive function counting value for gate
 	 * 
-	 * @param ii
-	 *            Gate's rows
-	 * @param jj
-	 *            Gate's column
+	 * @param gate
+	 *            gate whose value is calculated
 	 * 
-	 * @return Gate's value
+	 * @return gate's value
 	 */
-	public T calculateGateValue(int ii, int jj)
+	public T calculateGateValue(Gate<T> gate)
 	{
+		int ii = gate.getI(), jj = gate.getJ();
 		LinkedList<T> valueList = new LinkedList<T>();
 		LinkedList<Gate<T>> gateList;
 		if(jj == -1)
@@ -874,18 +906,16 @@ public class Grid<T>
 			gateList = gates[ii][jj].getEnteringGates();
 			if(recurrentProbability != 0)
 			{
-				for(Gate<T> gate : gateList)
+				for(Gate<T> x : gateList)
 				{
-					valueList.add(gate.getValue());
+					valueList.add(x.getValue());
 				}
 			}
 			else
 			{
-				for(Gate<T> gate : gateList)
+				for(Gate<T> x : gateList)
 				{
-					int iPrim = gate.getI();
-					int jPrim = gate.getJ();
-					valueList.add(calculateGateValue(iPrim, jPrim));
+					valueList.add(calculateGateValue(x));
 				}
 			}
 		}
@@ -910,20 +940,20 @@ public class Grid<T>
 		{
 			for(Gate<T> gate : activeGates)
 			{
-				calculateGateValue(gate.getI(), gate.getJ());
+				calculateGateValue(gate);
 			}
 			return output[arg].getValue();
 		}
 		else
 		{
 			Gate<T> lastGate = output[arg].getEnteringGates().getFirst();
-			int ii = lastGate.getI();
-			int jj = lastGate.getJ();
-			return calculateGateValue(ii, jj);
+			return calculateGateValue(lastGate);
 		}
 	}
-	
-	
+
+	/**
+	 * Sets input, gates and output values with initial value
+	 */
 	public void clearGatesValues()
 	{
 		for(int ii = 0; ii < m; ii++)
